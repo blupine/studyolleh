@@ -1,8 +1,14 @@
 package com.studyolleh.domain;
 
+import lombok.*;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Getter @Setter @EqualsAndHashCode(of = "id")
+@Builder
+@NoArgsConstructor @AllArgsConstructor
 public class Account {
     @Id @GeneratedValue
     private Long id;
@@ -18,6 +24,8 @@ public class Account {
     private boolean emailVerified;
 
     private String emailCheckToken;
+
+    private LocalDateTime joinedAt;
 
     private String bio;
 
