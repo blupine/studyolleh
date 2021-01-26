@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
-import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -52,7 +51,7 @@ public class AccountController {
             return view;
         }
 
-        if (account.getEmailCheckToken() != token) {
+        if (account.getEmailCheckToken().equals(token)) {
             model.addAttribute("error", "wrong.token");
             return view;
         }
