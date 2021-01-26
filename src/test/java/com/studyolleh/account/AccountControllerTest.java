@@ -1,24 +1,22 @@
 package com.studyolleh.account;
 
 import com.studyolleh.domain.Account;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -90,14 +88,13 @@ class AccountControllerTest {
 
         Account save = accountRepository.save(account);
         save.generateEmailCheckToken();
-        System.out.println("save.getEmailCheckToken() = " + save.getEmailCheckToken());
         mockMvc.perform(get("/check-email-token")
                 .param("token", save.getEmailCheckToken())
                 .param("email", save.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeDoesNotExist("error"))
                 .andExpect(model().attributeExists("nickname"))
-                .andExpect(model().attributeExists("numOfUser"))
+                .andExpect(model().attributeExists("numberOfUser"))
                 .andExpect(view().name("account/checked-email"));
     }
 
@@ -110,7 +107,8 @@ class AccountControllerTest {
                 .param("email", "fail@email.com"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("error"))
-                .andExpect(view().name("account/checked-email"));
+                .andExpect(view().name("account/checked-email"))
+                .andExpect(unauthenticated());
     }
 
 }
