@@ -2,8 +2,6 @@ package com.studyolleh.account;
 
 import com.studyolleh.domain.Account;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -27,16 +25,16 @@ public class AccountController {
         webDataBinder.addValidators(signUpFormValidator);   // 입력 폼 검증, nickname, email 중복 확인
     }
 
-    @GetMapping("/sign-up")
+    @GetMapping("/signup")
     public String signUpForm(Model model) {
         model.addAttribute(new SignUpForm());
-        return "account/sign-up";
+        return "account/signup";
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping("/signup")
     public String signUpSubmit(@Valid SignUpForm signUpForm, Errors errors){
         if (errors.hasErrors()) {
-            return "account/sign-up";
+            return "account/signup";
         }
         Account account = accountService.processNewAccount(signUpForm);
         accountService.login(account);
@@ -57,8 +55,7 @@ public class AccountController {
             return view;
         }
 
-        account.completeSignUp();
-        accountService.login(account);
+        accountService.completeSignUp(account);
 
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
