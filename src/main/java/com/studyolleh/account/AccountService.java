@@ -82,7 +82,12 @@ public class AccountService implements UserDetailsService {
         login(account);
     }
 
-
+    /**
+     * @param account : 비영속 상태 account 객체인점 주의
+     *                SettingsController.updateProfile(@CurrentUser account..) 에서 받아온 account라서 준영속 상태임
+     *               따라서 accountRepository의 save 호출을 통해 merge해야 함
+     * @param profile
+     */
     @Transactional
     public void updateProfile(Account account, Profile profile) {
         account.setUrl(profile.getUrl());
@@ -90,6 +95,7 @@ public class AccountService implements UserDetailsService {
         account.setLocation(profile.getLocation());
         account.setBio(profile.getBio());
 
+        accountRepository.save(account);
         // TODO 프로필 이미지
         // TODO 문제 하나 더 있음
     }
