@@ -35,23 +35,23 @@ class AccountControllerTest {
     @DisplayName("회원 가입 화면 테스트")
     @Test
     void signUpForm() throws Exception {
-        mockMvc.perform(get("/sign-up"))
+        mockMvc.perform(get("/signup"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("account/sign-up"))
+                .andExpect(view().name("account/signup"))
                 .andExpect(model().attributeExists("signUpForm"));
     }
 
     @DisplayName("회원 가입 처리 - 입력값 오류")
     @Test
     void signUpSubmit_with_wrong_input() throws Exception {
-        mockMvc.perform(post("/sign-up")
+        mockMvc.perform(post("/signup")
                 .param("nickname", "testnick")
                 .param("email", "testmail...")
                 .param("password", "12345")
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/signup"));
     }
 
     @DisplayName("회원 가입 처리 - 입력값 정상")
@@ -59,7 +59,7 @@ class AccountControllerTest {
     void signUpSubmit_with_correct_input() throws Exception {
         String nickname = "nickname";
         String email = "skwint11@gmail.com";
-        mockMvc.perform(post("/sign-up")
+        mockMvc.perform(post("/signup")
                 .param("nickname", nickname)
                 .param("email", email)
                 .param("password", "12345678")
