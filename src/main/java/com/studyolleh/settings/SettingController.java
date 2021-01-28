@@ -12,14 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 public class SettingController {
 
-    private static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
-    private static final String SETTINGS_PROFILE_URL = "/settings/profile";
-
+    public static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
+    public static final String SETTINGS_PROFILE_URL = "/settings/profile";
+    private UUID uuid;
     private final AccountService accountService;
 
     @GetMapping(SETTINGS_PROFILE_URL)
