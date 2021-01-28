@@ -20,13 +20,13 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
         newAccount.generateEmailCheckToken();
@@ -46,6 +46,7 @@ public class AccountService implements UserDetailsService {
         return accountRepository.save(account);
     }
 
+    @Transactional(readOnly = true)
     public void sendSignUpConfirmEmail(Account newAccount) {
         SimpleMailMessage simpleMailMessage= new SimpleMailMessage();
         simpleMailMessage.setText(newAccount.getEmail());
@@ -76,7 +77,6 @@ public class AccountService implements UserDetailsService {
         return new UserAccount(account);
     }
 
-    @Transactional
     public void completeSignUp(Account account) {
         account.completeSignUp();
         login(account);
@@ -88,7 +88,6 @@ public class AccountService implements UserDetailsService {
      *               따라서 accountRepository의 save 호출을 통해 merge해야 함
      * @param profile
      */
-    @Transactional
     public void updateProfile(Account account, Profile profile) {
         account.setUrl(profile.getUrl());
         account.setOccupation(profile.getOccupation());
@@ -96,6 +95,12 @@ public class AccountService implements UserDetailsService {
         account.setBio(profile.getBio());
         account.setProfileImage(profile.getProfileImage());
         accountRepository.save(account);
-
     }
+
+    public void updatePassword(Account account, String newPasasword) {
+        account.setPassword(passwordEncoder.encode(newPasasword));
+        accountRepository.save(account);
+    }
+
+
 }
