@@ -41,17 +41,17 @@ public class Account {
     @Lob @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
-    private boolean studyCreatedByEmail;
+    private boolean studyCreatedByEmail; // 스터디 생성을 이메일로 알람을 받음
 
-    private boolean studyCreatedByWeb;
+    private boolean studyCreatedByWeb = true;   // 스터디 생성을 웹으로 알람을 받음
 
-    private boolean studyEnrollmentResultByEmail;
+    private boolean studyEnrollmentResultByEmail; // 스터디 가입 신청 결과를 이메일로 받음
 
-    private boolean studyEnrollmentResultByWeb;
+    private boolean studyEnrollmentResultByWeb = true;   // 스터디 가입 신청 결과를 웹으로 받
 
     private boolean studyUpdatedByEmail;
 
-    private boolean studyUpdatedByWeb;
+    private boolean studyUpdatedByWeb = true;
 
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();

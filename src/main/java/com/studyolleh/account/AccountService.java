@@ -1,6 +1,7 @@
 package com.studyolleh.account;
 
 import com.studyolleh.domain.Account;
+import com.studyolleh.settings.Notifications;
 import com.studyolleh.settings.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -102,5 +103,13 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account);
     }
 
-
+    public void updateNotifications(Account account, Notifications notification) {
+        account.setStudyCreatedByEmail(notification.isStudyCreatedByEmail());
+        account.setStudyCreatedByWeb(notification.isStudyCreatedByWeb());
+        account.setStudyEnrollmentResultByEmail(notification.isStudyEnrollmentResultByEmail());
+        account.setStudyEnrollmentResultByWeb(notification.isStudyEnrollmentResultByWeb());
+        account.setStudyUpdatedByWeb(notification.isStudyUpdatedByWeb());
+        account.setStudyUpdatedByEmail(notification.isStudyUpdatedByEmail());
+        accountRepository.save(account);
+    }
 }
