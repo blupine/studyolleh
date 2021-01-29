@@ -1,8 +1,9 @@
 package com.studyolleh.account;
 
+import com.studyolleh.account.form.SignUpForm;
 import com.studyolleh.domain.Account;
-import com.studyolleh.settings.Notifications;
-import com.studyolleh.settings.Profile;
+import com.studyolleh.settings.form.Notifications;
+import com.studyolleh.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;

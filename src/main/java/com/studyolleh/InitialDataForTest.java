@@ -2,7 +2,7 @@ package com.studyolleh;
 
 import com.studyolleh.account.AccountRepository;
 import com.studyolleh.account.AccountService;
-import com.studyolleh.account.SignUpForm;
+import com.studyolleh.account.form.SignUpForm;
 import com.studyolleh.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
