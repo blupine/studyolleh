@@ -4,6 +4,7 @@ import com.studyolleh.domain.Account;
 import com.studyolleh.settings.Notifications;
 import com.studyolleh.settings.Profile;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +28,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);
@@ -90,11 +92,7 @@ public class AccountService implements UserDetailsService {
      * @param profile
      */
     public void updateProfile(Account account, Profile profile) {
-        account.setUrl(profile.getUrl());
-        account.setOccupation(profile.getOccupation());
-        account.setLocation(profile.getLocation());
-        account.setBio(profile.getBio());
-        account.setProfileImage(profile.getProfileImage());
+        modelMapper.map(profile, account);
         accountRepository.save(account);
     }
 
@@ -103,13 +101,8 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account);
     }
 
-    public void updateNotifications(Account account, Notifications notification) {
-        account.setStudyCreatedByEmail(notification.isStudyCreatedByEmail());
-        account.setStudyCreatedByWeb(notification.isStudyCreatedByWeb());
-        account.setStudyEnrollmentResultByEmail(notification.isStudyEnrollmentResultByEmail());
-        account.setStudyEnrollmentResultByWeb(notification.isStudyEnrollmentResultByWeb());
-        account.setStudyUpdatedByWeb(notification.isStudyUpdatedByWeb());
-        account.setStudyUpdatedByEmail(notification.isStudyUpdatedByEmail());
+    public void updateNotifications(Account account, Notifications notifications) {
+        modelMapper.map(notifications, account);
         accountRepository.save(account);
     }
 }
