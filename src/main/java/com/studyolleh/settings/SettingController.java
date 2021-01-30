@@ -1,5 +1,7 @@
 package com.studyolleh.settings;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolleh.account.AccountService;
 import com.studyolleh.account.CurrentUser;
 import com.studyolleh.domain.Account;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,6 +45,7 @@ public class SettingController {
     private final ModelMapper modelMapper;
     private final PasswordFormValidator passwordFormValidator;
     private final NicknameValidator nicknameFormValidator;
+    private final ObjectMapper objectMapper;
 
     @InitBinder("passwordForm")
     public void passwordFormInitBinder(WebDataBinder webDataBinder) {
@@ -135,10 +139,12 @@ public class SettingController {
     }
 
     @GetMapping(SETTINGS_TAGS_URL)
-    public String updateTagsForm(@CurrentUser Account account, Model model) {
+    public String updateTagsForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         Set<Tag> tags = accountService.getTags(account);
         model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
+        List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allTags));
         return SETTINGS_TAGS_VIEW_NAME;
     }
 
@@ -165,6 +171,4 @@ public class SettingController {
         accountService.removeTags(account, byTitle);
         return ResponseEntity.ok().build();
     }
-
-
 }
