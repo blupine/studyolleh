@@ -26,6 +26,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 class AccountControllerTest {
 
+    private static final String testNickname = "testnick";
+    private static final String testEmail = "testemail@email.com";
+    private static final String testFailEmail = "asdfsadf";
+    private static final String testPassword = "12341234";
+
     @Autowired private MockMvc mockMvc;
     @Autowired private AccountRepository accountRepository;
 
@@ -35,43 +40,40 @@ class AccountControllerTest {
     @DisplayName("회원 가입 화면 테스트")
     @Test
     void signUpForm() throws Exception {
-        mockMvc.perform(get("/signup"))
+        mockMvc.perform(get(AccountController.SIGNUP_URL))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("account/signup"))
+                .andExpect(view().name(AccountController.SIGNUP_VIEW_NAME))
                 .andExpect(model().attributeExists("signUpForm"));
     }
 
     @DisplayName("회원 가입 처리 - 입력값 오류")
     @Test
     void signUpSubmit_with_wrong_input() throws Exception {
-        mockMvc.perform(post("/signup")
-                .param("nickname", "testnick")
-                .param("email", "testmail...")
-                .param("password", "12345")
+        mockMvc.perform(post(AccountController.SIGNUP_URL)
+                .param("nickname", testNickname)
+                .param("email", testFailEmail)
+                .param("password", testPassword)
                 .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("account/signup"));
+                .andExpect(view().name(AccountController.SIGNUP_VIEW_NAME));
     }
 
     @DisplayName("회원 가입 처리 - 입력값 정상")
     @Test
     void signUpSubmit_with_correct_input() throws Exception {
-        String nickname = "nickname";
-        String email = "skwint11@gmail.com";
-        mockMvc.perform(post("/signup")
-                .param("nickname", nickname)
-                .param("email", email)
-                .param("password", "12345678")
+        mockMvc.perform(post(AccountController.SIGNUP_URL)
+                .param("nickname", testNickname)
+                .param("email", testEmail)
+                .param("password", testPassword)
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
 
-        Account account = accountRepository.findByEmail(email);
+        Account account = accountRepository.findByEmail(testEmail);
         assertNotNull(account);
-        assertNotEquals(account.getPassword(), "12345678");
-        System.out.println("account.getEmailCheckToken() = " + account.getEmailCheckToken());
+        assertNotEquals(account.getPassword(), testPassword);
         assertNotNull(account.getEmailCheckToken());
         then(javaMailSender).should().send(any(SimpleMailMessage.class));
     }
@@ -81,33 +83,33 @@ class AccountControllerTest {
     void checkEmailToken_with_correct_input() throws Exception{
         // signup
         Account account = Account.builder()
-                .email("skwint11@gmail.com")
-                .password("randompassword")
-                .nickname("blupine")
+                .email(testEmail)
+                .password(testPassword)
+                .nickname(testNickname)
                 .build();
 
         Account save = accountRepository.save(account);
         save.generateEmailCheckToken();
-        mockMvc.perform(get("/check-email-token")
+        mockMvc.perform(get(AccountController.CHECK_EMAIL_TOKEN_URL)
                 .param("token", save.getEmailCheckToken())
                 .param("email", save.getEmail()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeDoesNotExist("error"))
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("numberOfUser"))
-                .andExpect(view().name("account/checked-email"));
+                .andExpect(view().name(AccountController.CHECK_EMAIL_TOKEN_VIEW_NAME));
     }
 
 
     @DisplayName("인증 메일 확인 - 입력값 오류")
     @Test
     void checkEmailToken_with_wrong_input() throws Exception{
-        mockMvc.perform(get("/check-email-token")
-                .param("token", "failtoken")
+        mockMvc.perform(get(AccountController.CHECK_EMAIL_TOKEN_URL)
+                .param("token", "failtoke")
                 .param("email", "fail@email.com"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("error"))
-                .andExpect(view().name("account/checked-email"))
+                .andExpect(view().name(AccountController.CHECK_EMAIL_TOKEN_VIEW_NAME))
                 .andExpect(unauthenticated());
     }
 
