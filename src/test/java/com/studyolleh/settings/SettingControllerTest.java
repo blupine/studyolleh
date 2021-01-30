@@ -3,6 +3,7 @@ package com.studyolleh.settings;
 import com.studyolleh.WithAccount;
 import com.studyolleh.account.AccountRepository;
 import com.studyolleh.domain.Account;
+import lombok.With;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,6 +32,46 @@ class SettingControllerTest {
     @AfterEach
     void afterEach() {
         accountRepository.deleteAll();
+    }
+
+    @WithAccount(testName)
+    @DisplayName("닉네임 수정 폼")
+    @Test
+    void update_account_form() throws Exception {
+        mockMvc.perform(get(SettingController.SETTINGS_ACCOUNT_URL))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("nicknameForm"))
+                .andExpect(model().attributeExists("account"));
+    }
+
+    @WithAccount(testName)
+    @DisplayName("닉네임 수정 - 입력값 정상")
+    @Test
+    void update_account() throws Exception {
+        mockMvc.perform(post(SettingController.SETTINGS_ACCOUNT_URL)
+                .param("nickname", "newnickname")
+                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(SettingController.SETTINGS_ACCOUNT_URL))
+                .andExpect(flash().attributeExists("message"));
+
+        assertNotNull(accountRepository.findByNickname("newnickname"));
+    }
+
+    @WithAccount(testName)
+    @DisplayName("닉네임 수정 - 입력값 오류")
+    @Test
+    void update_account_with_error() throws Exception {
+        mockMvc.perform(post(SettingController.SETTINGS_ACCOUNT_URL)
+                .param("nickname", "ERROR_NICKNAME")
+                .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(view().name(SettingController.SETTINGS_ACCOUNT_VIEW_NAME))
+                .andExpect(model().hasErrors())
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("nicknameForm"));
+
+        assertNotNull(accountRepository.findByNickname(testName));
     }
 
     @WithAccount(testName)
