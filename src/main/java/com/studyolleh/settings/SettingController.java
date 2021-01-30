@@ -3,21 +3,19 @@ package com.studyolleh.settings;
 import com.studyolleh.account.AccountService;
 import com.studyolleh.account.CurrentUser;
 import com.studyolleh.domain.Account;
-import com.studyolleh.settings.form.NicknameForm;
-import com.studyolleh.settings.form.Notifications;
-import com.studyolleh.settings.form.PasswordForm;
-import com.studyolleh.settings.form.Profile;
+import com.studyolleh.domain.Tag;
+import com.studyolleh.settings.form.*;
 import com.studyolleh.settings.validator.NicknameValidator;
 import com.studyolleh.settings.validator.PasswordFormValidator;
+import com.studyolleh.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -34,8 +32,12 @@ public class SettingController {
     public static final String SETTINGS_NOTIFICATION_URL = "/settings/notifications";
     public static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
     public static final String SETTINGS_ACCOUNT_URL = "/settings/account";
+    public static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
+    public static final String SETTINGS_TAGS_URL = "/settings/tags";
+    public static final String SETTINGS_TAGS_ADD_URL = "/settings/tags/add";
 
     private final AccountService accountService;
+    private final TagRepository tagRepository;
     private final ModelMapper modelMapper;
     private final PasswordFormValidator passwordFormValidator;
     private final NicknameValidator nicknameFormValidator;
@@ -130,4 +132,23 @@ public class SettingController {
         redirectAttributes.addFlashAttribute("message", "닉네임 수정을 완료했습니다.");
         return "redirect:" + SETTINGS_ACCOUNT_URL;
     }
+
+    @GetMapping(SETTINGS_TAGS_URL)
+    public String updateTagsForm(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        return SETTINGS_TAGS_VIEW_NAME;
+    }
+
+    @PostMapping(SETTINGS_TAGS_ADD_URL)
+    @ResponseBody
+    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title);
+        if (tag == null) {
+            tag = tagRepository.save(Tag.builder().title(title).build());
+        }
+        accountService.addTag(account, tag);
+        return ResponseEntity.ok().build();
+    }
+
 }

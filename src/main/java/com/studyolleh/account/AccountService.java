@@ -2,6 +2,7 @@ package com.studyolleh.account;
 
 import com.studyolleh.account.form.SignUpForm;
 import com.studyolleh.domain.Account;
+import com.studyolleh.domain.Tag;
 import com.studyolleh.settings.form.Notifications;
 import com.studyolleh.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -121,5 +123,10 @@ public class AccountService implements UserDetailsService {
         simpleMailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() +
                 "&email=" + account.getEmail());
         javaMailSender.send(simpleMailMessage);
+    }
+
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(tag));
     }
 }
