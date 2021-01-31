@@ -3,7 +3,7 @@ package com.studyolleh.settings;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolleh.account.AccountService;
-import com.studyolleh.account.CurrentUser;
+import com.studyolleh.account.CurrentAccount;
 import com.studyolleh.domain.Account;
 import com.studyolleh.domain.Tag;
 import com.studyolleh.settings.form.*;
@@ -63,14 +63,14 @@ public class SettingController {
 
 
     @GetMapping(PROFILE_URL)
-    public String profileUpdateForm(@CurrentUser Account account, Model model) {
+    public String profileUpdateForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, Profile.class));
         return PROFILE_VIEW_NAME;
     }
 
     @PostMapping(PROFILE_URL)
-    public String updateProfile(@CurrentUser Account account, @Valid Profile profile,
+    public String updateProfile(@CurrentAccount Account account, @Valid Profile profile,
                                 Errors errors, Model model, RedirectAttributes attributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -83,14 +83,14 @@ public class SettingController {
     }
 
     @GetMapping(PASSWORD_URL)
-    public String updatePasswordForm(@CurrentUser Account account, Model model) {
+    public String updatePasswordForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(new PasswordForm());
         return PASSWORD_VIEW_NAME;
     }
 
     @PostMapping(PASSWORD_URL)
-    public String updatePassword(@CurrentUser Account account, @Valid PasswordForm passwordForm,
+    public String updatePassword(@CurrentAccount Account account, @Valid PasswordForm passwordForm,
                                  Errors errors, Model model, RedirectAttributes redirectAttributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -103,14 +103,14 @@ public class SettingController {
     }
 
     @GetMapping(NOTIFICATION_URL)
-    public String updateNotificationForm(@CurrentUser Account account, Model model) {
+    public String updateNotificationForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, Notifications.class));
         return NOTIFICATION_VIEW_NAME;
     }
 
     @PostMapping(NOTIFICATION_URL)
-    public String updateNotifications(@CurrentUser Account account, @Valid Notifications notifications,
+    public String updateNotifications(@CurrentAccount Account account, @Valid Notifications notifications,
                                       Errors errors, Model model, RedirectAttributes redirectAttributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -123,14 +123,14 @@ public class SettingController {
     }
 
     @GetMapping(ACCOUNT_URL)
-    public String updateAccountForm(@CurrentUser Account account, Model model) {
+    public String updateAccountForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, NicknameForm.class));
         return ACCOUNT_VIEW_NAME;
     }
 
     @PostMapping(ACCOUNT_URL)
-    public String updateAccount(@CurrentUser Account account, @Valid NicknameForm nicknameForm,
+    public String updateAccount(@CurrentAccount Account account, @Valid NicknameForm nicknameForm,
                                 Errors errors, Model model, RedirectAttributes redirectAttributes) {
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -143,7 +143,7 @@ public class SettingController {
     }
 
     @GetMapping(TAGS_URL)
-    public String updateTagsForm(@CurrentUser Account account, Model model) throws JsonProcessingException {
+    public String updateTagsForm(@CurrentAccount Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         Set<Tag> tags = accountService.getTags(account);
         model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
@@ -154,7 +154,7 @@ public class SettingController {
 
     @PostMapping(TAGS_URL + "/add")
     @ResponseBody
-    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+    public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
         Tag tag = tagRepository.findByTitle(title);
         if (tag == null) {
@@ -166,7 +166,7 @@ public class SettingController {
 
     @PostMapping(TAGS_URL + "/remove")
     @ResponseBody
-    public ResponseEntity removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+    public ResponseEntity removeTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
         Tag byTitle = tagRepository.findByTitle(title);
         if(byTitle == null){
