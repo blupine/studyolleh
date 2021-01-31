@@ -6,10 +6,12 @@ import com.studyolleh.account.AccountService;
 import com.studyolleh.account.CurrentAccount;
 import com.studyolleh.domain.Account;
 import com.studyolleh.domain.Tag;
+import com.studyolleh.domain.Zone;
 import com.studyolleh.settings.form.*;
 import com.studyolleh.settings.validator.NicknameValidator;
 import com.studyolleh.settings.validator.PasswordFormValidator;
 import com.studyolleh.tag.TagRepository;
+import com.studyolleh.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -37,15 +39,18 @@ public class SettingController {
     public static final String NOTIFICATION_URL = "/notifications";
     public static final String ACCOUNT_URL = "/account";
     public static final String TAGS_URL = "/tags";
+    public static final String ZONES_URL = "/zones";
 
-    public static final String PROFILE_VIEW_NAME = SETTINGS + "/profile";
-    public static final String PASSWORD_VIEW_NAME = SETTINGS + "/password";
-    public static final String NOTIFICATION_VIEW_NAME = SETTINGS + "/notifications";
-    public static final String ACCOUNT_VIEW_NAME = SETTINGS + "/account";
-    public static final String TAGS_VIEW_NAME = SETTINGS + "/tags";
+    public static final String PROFILE_VIEW_NAME = SETTINGS + PROFILE_URL;
+    public static final String PASSWORD_VIEW_NAME = SETTINGS + PASSWORD_URL;
+    public static final String NOTIFICATION_VIEW_NAME = SETTINGS + NOTIFICATION_URL;
+    public static final String ACCOUNT_VIEW_NAME = SETTINGS + ACCOUNT_URL;
+    public static final String TAGS_VIEW_NAME = SETTINGS + TAGS_URL;
+    public static final String ZONES_VIEW_NAME = SETTINGS + ZONES_URL;
 
     private final AccountService accountService;
     private final TagRepository tagRepository;
+    private final ZoneRepository zoneRepository;
     private final ModelMapper modelMapper;
     private final PasswordFormValidator passwordFormValidator;
     private final NicknameValidator nicknameFormValidator;
@@ -60,7 +65,6 @@ public class SettingController {
     public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(nicknameFormValidator);
     }
-
 
     @GetMapping(PROFILE_URL)
     public String profileUpdateForm(@CurrentAccount Account account, Model model) {
@@ -169,10 +173,46 @@ public class SettingController {
     public ResponseEntity removeTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
         Tag byTitle = tagRepository.findByTitle(title);
-        if(byTitle == null){
+        if (byTitle == null) {
             return ResponseEntity.badRequest().build();
         }
-        accountService.removeTags(account, byTitle);
+        accountService.removeTag(account, byTitle);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(ZONES_URL)
+    public String updateZonesForm(@CurrentAccount Account account, Model model) throws JsonProcessingException {
+        model.addAttribute(account);
+
+        Set<Zone> zones = accountService.getZones(account);
+        model.addAttribute("zones", zones);
+
+        List<String> zoneList = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(zoneList));
+        return ZONES_VIEW_NAME;
+    }
+
+    @PostMapping(ZONES_URL + "/add")
+    @ResponseBody
+    public ResponseEntity addZone(@CurrentAccount Account account, @RequestBody ZoneForm zoneForm) {
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvince());
+        if (zone == null) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        accountService.addZone(account, zone);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(ZONES_URL + "/remove")
+    @ResponseBody
+    public ResponseEntity removeZone(@CurrentAccount Account account, @RequestBody ZoneForm zoneForm) {
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvince());
+        if(zone == null){
+            return ResponseEntity.badRequest().build();
+        }
+
+        accountService.removeZone(account, zone);
         return ResponseEntity.ok().build();
     }
 }

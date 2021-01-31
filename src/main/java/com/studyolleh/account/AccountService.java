@@ -3,6 +3,7 @@ package com.studyolleh.account;
 import com.studyolleh.account.form.SignUpForm;
 import com.studyolleh.domain.Account;
 import com.studyolleh.domain.Tag;
+import com.studyolleh.domain.Zone;
 import com.studyolleh.settings.form.Notifications;
 import com.studyolleh.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
@@ -131,8 +132,23 @@ public class AccountService implements UserDetailsService {
         return byId.orElseThrow().getTags();
     }
 
-    public void removeTags(Account account, Tag tag){
+    public void removeTag(Account account, Tag tag){
         Optional<Account> byId = accountRepository.findById(account.getId());
-        byId.orElseThrow().getTags().remove(tag);
+        byId.ifPresent(a -> a.getTags().remove(tag));
+    }
+
+    public Set<Zone> getZones(Account account) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        return byId.orElseThrow().getZones();
+    }
+
+    public void addZone(Account account, Zone zone) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getZones().add(zone));
+    }
+
+    public void removeZone(Account account, Zone zone) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getZones().remove(zone));
     }
 }
