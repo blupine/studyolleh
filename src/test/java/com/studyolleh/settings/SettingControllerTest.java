@@ -1,8 +1,13 @@
 package com.studyolleh.settings;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolleh.WithAccount;
 import com.studyolleh.account.AccountRepository;
+import com.studyolleh.account.AccountService;
 import com.studyolleh.domain.Account;
+import com.studyolleh.domain.Tag;
+import com.studyolleh.settings.form.TagForm;
+import com.studyolleh.tag.TagRepository;
 import lombok.With;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,8 +15,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
@@ -27,11 +34,69 @@ class SettingControllerTest {
     @Autowired MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;
     @Autowired PasswordEncoder passwordEncoder;
-
+    @Autowired ObjectMapper objectMapper;
+    @Autowired TagRepository tagRepository;
+    @Autowired AccountService accountService;
 
     @AfterEach
     void afterEach() {
         accountRepository.deleteAll();
+    }
+
+    @WithAccount(testName)
+    @DisplayName("태그 수정 폼")
+    @Test
+    void update_tag_form() throws Exception {
+        mockMvc.perform(get(SettingController.SETTINGS_TAGS_URL))
+                .andExpect(status().isOk())
+                .andExpect(view().name(SettingController.SETTINGS_TAGS_VIEW_NAME))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("whitelist"))
+                .andExpect(model().attributeExists("tags"));
+    }
+
+
+    @Transactional // getTags 시에 지연로딩 발생 -> 트랜잭션 어노테이션이 필요함
+    @WithAccount(testName)
+    @DisplayName("태그 추가")
+    @Test
+    void add_tag() throws Exception {
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+        mockMvc.perform(post(SettingController.SETTINGS_TAGS_URL + "/add")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+
+        Tag newTag = tagRepository.findByTitle("newTag");
+        assertNotNull(newTag);
+        Account account = accountRepository.findByNickname(testName);
+        assertTrue(account.getTags().contains(newTag));
+    }
+
+    @Transactional
+    @WithAccount(testName)
+    @DisplayName("태그 삭제")
+    @Test
+    void remove_tag() throws Exception {
+        Account account = accountRepository.findByNickname(testName);
+        Tag newTag = tagRepository.save(Tag.builder().title("newTag").build());
+        accountService.addTag(account, newTag);
+
+        assertTrue(account.getTags().contains(newTag));
+
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("newTag");
+        mockMvc.perform(post(SettingController.SETTINGS_TAGS_URL + "/remove")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+
+        assertFalse(account.getTags().contains(newTag));
+
     }
 
     @WithAccount(testName)
