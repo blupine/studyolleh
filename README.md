@@ -2,7 +2,7 @@
 - Add next to src/main/resources/application-dev.properties
     - Modify the database source and email account information to your own. 
 ```properties
-spring.datasource.url=dbc:h2:tcp://localhost/~/study-olleh
+spring.datasource.url=jdbc:h2:tcp://localhost/~/study-olleh
 spring.datasource.username=sa
 spring.datasource.password=
 spring.datasource.driver-class-name=org.h2.Driver

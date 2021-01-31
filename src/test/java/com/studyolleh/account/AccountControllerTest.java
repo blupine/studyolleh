@@ -1,6 +1,8 @@
 package com.studyolleh.account;
 
 import com.studyolleh.domain.Account;
+import com.studyolleh.mail.EmailMessage;
+import com.studyolleh.mail.EmailService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AccountControllerTest {
 
     private static final String testNickname = "testnick";
-    private static final String testEmail = "testemail@email.com";
+    private static final String testEmail = "skwint11@naver.com";
     private static final String testFailEmail = "asdfsadf";
     private static final String testPassword = "12341234";
 
@@ -35,7 +37,7 @@ class AccountControllerTest {
     @Autowired private AccountRepository accountRepository;
 
     @MockBean
-    private JavaMailSender javaMailSender;
+    private EmailService emailService;
 
     @DisplayName("회원 가입 화면 테스트")
     @Test
@@ -75,7 +77,7 @@ class AccountControllerTest {
         assertNotNull(account);
         assertNotEquals(account.getPassword(), testPassword);
         assertNotNull(account.getEmailCheckToken());
-        then(javaMailSender).should().send(any(SimpleMailMessage.class));
+        then(emailService).should().sendEmail(any(EmailMessage.class));
     }
 
     @DisplayName("인증 메일 확인 - 입력값 정상")
