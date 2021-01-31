@@ -29,8 +29,8 @@ class MainControllerTest {
     @BeforeEach
     void beforeEach() {
         SignUpForm signUpForm = new SignUpForm();
-        signUpForm.setNickname("blupine");
-        signUpForm.setEmail("skwint11@gmail.com");
+        signUpForm.setNickname("testname");
+        signUpForm.setEmail("testname@gmail.com");
         signUpForm.setPassword("testPassword");
         accountService.processNewAccount(signUpForm);
     }
@@ -44,24 +44,24 @@ class MainControllerTest {
     @Test
     void login_with_email() throws Exception{
         mockMvc.perform(post("/login")
-                .param("username", "skwint11@gmail.com")
+                .param("username", "testname@gmail.com")
                 .param("password", "testPassword")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
-                .andExpect(authenticated().withUsername("blupine"));
+                .andExpect(authenticated().withUsername("testname"));
     }
 
     @DisplayName("닉네임 로그인")
     @Test
     void login_with_nickname() throws Exception {
         mockMvc.perform(post("/login")
-                .param("username", "blupine")
+                .param("username", "testname")
                 .param("password", "testPassword")
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"))
-                .andExpect(authenticated().withUsername("blupine"));
+                .andExpect(authenticated().withUsername("testname"));
     }
 
     @DisplayName("로그인 실패")
