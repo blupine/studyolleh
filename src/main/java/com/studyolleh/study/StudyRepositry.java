@@ -8,6 +8,6 @@ public interface StudyRepositry extends JpaRepository<Study, Long> {
 
     boolean existsByPath(String path);
 
-    @EntityGraph(value = "study.withAll", type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = "Study.withAll", type = EntityGraph.EntityGraphType.LOAD)
     Study findByPath(String path);
 }

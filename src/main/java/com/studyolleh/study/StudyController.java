@@ -13,6 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -25,6 +26,7 @@ public class StudyController {
 
     private final StudyFormValidator studyFormValidator;
     private final StudyService studyService;
+    private final StudyRepositry studyRepositry;
     private final ModelMapper modelMapper;
 
     @InitBinder("studyForm")
@@ -49,4 +51,10 @@ public class StudyController {
         return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);
     }
 
+    @GetMapping("/study/{path}")
+    public String viewStudy(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(studyRepositry.findByPath(path));
+        return "study/view";
+    }
 }
