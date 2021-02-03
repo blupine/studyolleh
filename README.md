@@ -1,4 +1,4 @@
-###1. Setting Security Config
+### 1. Setting Security Config
 - Add next to src/main/resources/application-dev.properties
     - Modify the database source and email account information to your own. 
 ```properties
