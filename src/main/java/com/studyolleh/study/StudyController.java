@@ -3,18 +3,18 @@ package com.studyolleh.study;
 import com.studyolleh.account.CurrentAccount;
 import com.studyolleh.domain.Account;
 import com.studyolleh.domain.Study;
+import com.studyolleh.study.form.StudyDescriptionForm;
 import com.studyolleh.study.form.StudyForm;
 import com.studyolleh.study.validator.StudyFormValidator;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.net.URLEncoder;
@@ -26,7 +26,6 @@ public class StudyController {
 
     private final StudyFormValidator studyFormValidator;
     private final StudyService studyService;
-    private final StudyRepository studyRepositry;
     private final ModelMapper modelMapper;
 
     @InitBinder("studyForm")
@@ -54,15 +53,18 @@ public class StudyController {
 
     @GetMapping("/study/{path}")
     public String viewStudy(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudy(path);
         model.addAttribute(account);
-        model.addAttribute(studyRepositry.findByPath(path));
+        model.addAttribute(study);
         return "study/view";
     }
 
     @GetMapping("/study/{path}/members")
     public String viewStudyMembers(@CurrentAccount Account account, @PathVariable String path, Model model){
+        Study study = studyService.getStudy(path);
         model.addAttribute(account);
-        model.addAttribute(studyRepositry.findByPath(path));
+        model.addAttribute(study);
         return "study/members";
     }
+
 }
