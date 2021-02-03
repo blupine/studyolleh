@@ -92,13 +92,37 @@ class StudyControllerTest {
         study.setShortDescription("short description");
         study.setFullDescription("full description");
 
-        Account keesun = accountRepository.findByNickname(testName);
-        studyService.createNewStudy(study, keesun);
+        Account account = accountRepository.findByNickname(testName);
+        studyService.createNewStudy(study, account);
 
         mockMvc.perform(get("/study/test-path"))
                 .andExpect(view().name("study/view"))
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("study"));
+    }
+
+    @Test
+    @WithAccount(testName)
+    @DisplayName("스터디 멤버 조회 폼")
+    void studyMemberForm() throws Exception {
+        // given
+        Study study = new Study();
+        study.setPath("test-path");
+        study.setTitle("test study");
+        study.setShortDescription("short description");
+        study.setFullDescription("full description");
+
+        Account account = accountRepository.findByNickname(testName);
+        studyService.createNewStudy(study, account);
+
+        // when
+        mockMvc.perform(get("/study/test-path/members"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("study/members"))
+                .andExpect(model().attributeExists("account"))
+                .andExpect(model().attributeExists("study"));
+
+        // then
     }
 
 

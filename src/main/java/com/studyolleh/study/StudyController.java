@@ -58,4 +58,11 @@ public class StudyController {
         model.addAttribute(studyRepositry.findByPath(path));
         return "study/view";
     }
+
+    @GetMapping("/study/{path}/members")
+    public String viewStudyMembers(@CurrentAccount Account account, @PathVariable String path, Model model){
+        model.addAttribute(account);
+        model.addAttribute(studyRepositry.findByPath(path));
+        return "study/members";
+    }
 }
