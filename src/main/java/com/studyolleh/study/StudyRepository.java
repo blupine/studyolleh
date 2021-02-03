@@ -4,7 +4,7 @@ import com.studyolleh.domain.Study;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface StudyRepositry extends JpaRepository<Study, Long> {
+public interface StudyRepository extends JpaRepository<Study, Long> {
 
     boolean existsByPath(String path);
 

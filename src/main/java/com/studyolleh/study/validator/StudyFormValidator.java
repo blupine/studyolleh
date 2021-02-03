@@ -1,6 +1,6 @@
 package com.studyolleh.study.validator;
 
-import com.studyolleh.study.StudyRepositry;
+import com.studyolleh.study.StudyRepository;
 import com.studyolleh.study.form.StudyForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import org.springframework.validation.Validator;
 @RequiredArgsConstructor
 public class StudyFormValidator implements Validator {
 
-    private final StudyRepositry studyRepositry;
+    private final StudyRepository studyRepositry;
 
     @Override
     public boolean supports(Class<?> clazz) {

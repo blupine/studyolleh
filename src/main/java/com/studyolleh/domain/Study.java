@@ -65,6 +65,9 @@ public class Study {
         this.managers.add(account);
     }
 
+    public void addMemeber(Account account) {
+        this.members.add(account);
+    }
     public boolean isJoinable(UserAccount userAccount) {
         Account account = userAccount.getAccount();
         return this.isPublished() && this.isRecruiting()
@@ -76,7 +79,7 @@ public class Study {
     }
 
     public boolean isManager(UserAccount userAccount) {
-        return this.members.contains(userAccount.getAccount());
+        return this.managers.contains(userAccount.getAccount());
     }
 
 

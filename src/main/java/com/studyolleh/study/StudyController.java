@@ -26,7 +26,7 @@ public class StudyController {
 
     private final StudyFormValidator studyFormValidator;
     private final StudyService studyService;
-    private final StudyRepositry studyRepositry;
+    private final StudyRepository studyRepositry;
     private final ModelMapper modelMapper;
 
     @InitBinder("studyForm")
@@ -42,8 +42,9 @@ public class StudyController {
     }
 
     @PostMapping("/new-study")
-    public String newStudySubmit(@CurrentAccount Account account, @Valid StudyForm studyForm, Errors errors) {
+    public String newStudySubmit(@CurrentAccount Account account, @Valid StudyForm studyForm, Errors errors, Model model) {
         if(errors.hasErrors()){
+            model.addAttribute(account);
             return "study/form";
         }
 
