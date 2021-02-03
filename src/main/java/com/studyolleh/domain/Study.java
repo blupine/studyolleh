@@ -82,5 +82,7 @@ public class Study {
         return this.managers.contains(userAccount.getAccount());
     }
 
-
+    public String getImage() {
+        return this.image != null ? this.image : "/images/default_banner.png";
+    }
 }

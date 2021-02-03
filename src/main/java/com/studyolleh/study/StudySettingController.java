@@ -1,5 +1,6 @@
 package com.studyolleh.study;
 
+import com.studyolleh.account.AccountController;
 import com.studyolleh.account.CurrentAccount;
 import com.studyolleh.domain.Account;
 import com.studyolleh.domain.Study;
@@ -31,7 +32,6 @@ public class StudySettingController {
 
     @GetMapping("/description")
     public String viewStudySetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        log.debug("description requested");
         Study study = studyService.getStudyByPathToUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(study);
@@ -55,6 +55,37 @@ public class StudySettingController {
         studyService.updateStudyDescription(study, studyDescriptionForm);
         redirectAttributes.addFlashAttribute("message", "스터디 소개를 수정했습니다.");
         return "redirect:/study/" + getPath(path) + "/settings/description";
+    }
+
+    @GetMapping("/banner")
+    public String viewBannerSetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudyByPathToUpdate(account, path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        return "study/settings/banner";
+    }
+
+    @PostMapping("/banner")
+    public String updateBannerSetting(@CurrentAccount Account account, @PathVariable String path,
+                                      String image, RedirectAttributes redirectAttributes) {
+        Study study = studyService.getStudyByPathToUpdate(account, path);
+        studyService.updateStudyImage(study, image);
+        redirectAttributes.addFlashAttribute("message", "스터디 이미지를 수정했습니다");
+        return "redirect:/study/" + getPath(path) + "/settings/banner";
+    }
+
+    @PostMapping("/banner/enable")
+    public String enableBannerSetting(@CurrentAccount Account account, @PathVariable String path){
+        Study study = studyService.getStudyByPathToUpdate(account, path);
+        studyService.enableStudyBanner(study);
+        return "redirect:/study/" + getPath(path) + "/settings/banner";
+    }
+
+    @PostMapping("/banner/disable")
+    public String disableBannerSetting(@CurrentAccount Account account, @PathVariable String path){
+        Study study = studyService.getStudyByPathToUpdate(account, path);
+        studyService.disableStudyBanner(study);
+        return "redirect:/study/" + getPath(path) + "/settings/banner";
     }
 
     private String getPath(String path) {
