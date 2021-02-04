@@ -1,4 +1,4 @@
-package com.studyolleh.settings.form;
+package com.studyolleh.tag;
 
 import lombok.Data;
 

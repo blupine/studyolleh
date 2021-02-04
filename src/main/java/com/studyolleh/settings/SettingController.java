@@ -10,7 +10,10 @@ import com.studyolleh.domain.Zone;
 import com.studyolleh.settings.form.*;
 import com.studyolleh.settings.validator.NicknameValidator;
 import com.studyolleh.settings.validator.PasswordFormValidator;
+import com.studyolleh.tag.TagForm;
 import com.studyolleh.tag.TagRepository;
+import com.studyolleh.tag.TagService;
+import com.studyolleh.zone.ZoneForm;
 import com.studyolleh.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -49,6 +52,7 @@ public class SettingController {
     public static final String ZONES_VIEW_NAME = SETTINGS + ZONES_URL;
 
     private final AccountService accountService;
+    private final TagService tagService;
     private final TagRepository tagRepository;
     private final ZoneRepository zoneRepository;
     private final ModelMapper modelMapper;
@@ -159,11 +163,7 @@ public class SettingController {
     @PostMapping(TAGS_URL + "/add")
     @ResponseBody
     public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
-        String title = tagForm.getTagTitle();
-        Tag tag = tagRepository.findByTitle(title);
-        if (tag == null) {
-            tag = tagRepository.save(Tag.builder().title(title).build());
-        }
+        Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
         accountService.addTag(account, tag);
         return ResponseEntity.ok().build();
     }
