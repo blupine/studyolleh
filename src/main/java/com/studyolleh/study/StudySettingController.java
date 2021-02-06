@@ -2,7 +2,6 @@ package com.studyolleh.study;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.studyolleh.account.AccountController;
 import com.studyolleh.account.CurrentAccount;
 import com.studyolleh.domain.Account;
 import com.studyolleh.domain.Study;
@@ -16,7 +15,6 @@ import com.studyolleh.zone.ZoneForm;
 import com.studyolleh.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dom4j.rule.Mode;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -26,8 +24,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,7 +64,7 @@ public class StudySettingController {
 
         studyService.updateStudyDescription(study, studyDescriptionForm);
         redirectAttributes.addFlashAttribute("message", "스터디 소개를 수정했습니다.");
-        return "redirect:/study/" + getPath(path) + "/settings/description";
+        return "redirect:/study/" + study.getEncodedPath() + "/settings/description";
     }
 
     @GetMapping("/banner")
@@ -85,21 +81,21 @@ public class StudySettingController {
         Study study = studyService.getStudyByPathToUpdate(account, path);
         studyService.updateStudyImage(study, image);
         redirectAttributes.addFlashAttribute("message", "스터디 이미지를 수정했습니다");
-        return "redirect:/study/" + getPath(path) + "/settings/banner";
+        return "redirect:/study/" + study.getEncodedPath() + "/settings/banner";
     }
 
     @PostMapping("/banner/enable")
     public String enableBannerSetting(@CurrentAccount Account account, @PathVariable String path){
         Study study = studyService.getStudyByPathToUpdate(account, path);
         studyService.enableStudyBanner(study);
-        return "redirect:/study/" + getPath(path) + "/settings/banner";
+        return "redirect:/study/" + study.getEncodedPath() + "/settings/banner";
     }
 
     @PostMapping("/banner/disable")
     public String disableBannerSetting(@CurrentAccount Account account, @PathVariable String path){
         Study study = studyService.getStudyByPathToUpdate(account, path);
         studyService.disableStudyBanner(study);
-        return "redirect:/study/" + getPath(path) + "/settings/banner";
+        return "redirect:/study/" + study.getEncodedPath() + "/settings/banner";
     }
 
     @GetMapping("/tags")
@@ -197,7 +193,7 @@ public class StudySettingController {
         model.addAttribute(account);
         model.addAttribute(study);
         attributes.addFlashAttribute("message", "스터디를 공개했습니다.");
-        return "redirect:/study/"+ getPath(path) + "/settings/study";
+        return "redirect:/study/"+ study.getEncodedPath() + "/settings/study";
     }
 
     @PostMapping("study/close")
@@ -208,7 +204,7 @@ public class StudySettingController {
         model.addAttribute(account);
         model.addAttribute(study);
         attributes.addFlashAttribute("message", "스터디를 종료했습니다.");
-        return "redirect:/study/" + getPath(path) + "/settings/study";
+        return "redirect:/study/" + study.getEncodedPath() + "/settings/study";
     }
 
     @PostMapping("recruit/start")
@@ -217,13 +213,13 @@ public class StudySettingController {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         if(!study.canUpdateRecruiting()){
             attributes.addFlashAttribute("message", "인원 모집 설정은 한 시간에 한 번 변경 가능합니다.");
-            return "redirect:/study/"+ getPath(path) + "/settings/study";
+            return "redirect:/study/"+ study.getEncodedPath() + "/settings/study";
         }
         studyService.startRecruit(study);
         model.addAttribute(account);
         model.addAttribute(study);
         attributes.addFlashAttribute("message", "스터디 인원 모집을 시작했습니다.");
-        return "redirect:/study/"+ getPath(path) + "/settings/study";
+        return "redirect:/study/"+ study.getEncodedPath() + "/settings/study";
     }
 
     @PostMapping("recruit/stop")
@@ -232,13 +228,13 @@ public class StudySettingController {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         if(!study.canUpdateRecruiting()){
             attributes.addFlashAttribute("message", "인원 모집 설정은 한 시간에 한 번 변경 가능합니다.");
-            return "redirect:/study/"+ getPath(path) + "/settings/study";
+            return "redirect:/study/"+ study.getEncodedPath() + "/settings/study";
         }
         studyService.stopRecruit(study);
         model.addAttribute(account);
         model.addAttribute(study);
         attributes.addFlashAttribute("message", "스터디 인원 모집을 종료했습니다.");
-        return "redirect:/study/"+ getPath(path) + "/settings/study";
+        return "redirect:/study/"+ study.getEncodedPath() + "/settings/study";
     }
 
     @PostMapping("study/path")
@@ -253,7 +249,7 @@ public class StudySettingController {
         }
         studyService.updateStudyPath(study, newPath);
         attributes.addFlashAttribute("message", "스터디 경로를 수정하였습니다.");
-        return "redirect:/study/" + getPath(newPath) + "/settings/study";
+        return "redirect:/study/" + study.getEncodedPath() + "/settings/study";
     }
 
     @PostMapping("study/title")
@@ -267,7 +263,7 @@ public class StudySettingController {
             return "study/settings/study";
         }
         studyService.updateStudyTitle(study, newTitle);
-        return "redirect:/study/" + getPath(path) + "/settings/study";
+        return "redirect:/study/" + study.getEncodedPath() + "/settings/study";
     }
 
     @PostMapping("study/remove")
@@ -275,9 +271,5 @@ public class StudySettingController {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         studyService.removeStudy(study);
         return "redirect:/";
-    }
-
-    private String getPath(String path) {
-        return URLEncoder.encode(path, StandardCharsets.UTF_8);
     }
 }

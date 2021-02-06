@@ -3,22 +3,18 @@ package com.studyolleh.study;
 import com.studyolleh.account.CurrentAccount;
 import com.studyolleh.domain.Account;
 import com.studyolleh.domain.Study;
-import com.studyolleh.study.form.StudyDescriptionForm;
 import com.studyolleh.study.form.StudyForm;
 import com.studyolleh.study.validator.StudyFormValidator;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -48,7 +44,7 @@ public class StudyController {
         }
 
         Study newStudy = studyService.createNewStudy(modelMapper.map(studyForm, Study.class), account);
-        return "redirect:/study/" + URLEncoder.encode(newStudy.getPath(), StandardCharsets.UTF_8);
+        return "redirect:/study/" + newStudy.getEncodedPath();
     }
 
     @GetMapping("/study/{path}")
