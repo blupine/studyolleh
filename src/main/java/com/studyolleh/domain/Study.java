@@ -137,4 +137,8 @@ public class Study {
     public boolean canUpdateRecruiting() {
         return this.published && this.recruitingUpdateDateTime == null || this.recruitingUpdateDateTime.isBefore(LocalDateTime.now().minusHours(1));
     }
+
+    public boolean isRemovable() {
+        return !this.published; // 모임을 했던 스터디는 삭제할 수 없음
+    }
 }
