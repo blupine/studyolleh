@@ -5,6 +5,7 @@ import com.studyolleh.domain.Study;
 import com.studyolleh.domain.Tag;
 import com.studyolleh.domain.Zone;
 import com.studyolleh.study.form.StudyDescriptionForm;
+import com.studyolleh.study.form.StudyForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -69,17 +70,40 @@ public class StudyService {
     }
 
     public Study getStudyToUpdateTag(Account account, String path) {
-        Study study = studyRepository.findAccountWithTagsByPath(path);
+        Study study = studyRepository.findStudyWithTagsByPath(path);
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
     }
 
     public Study getStudyToUpdateZone(Account account, String path) {
-        Study study = studyRepository.findAccountWithZonesByPath(path);
+        Study study = studyRepository.findStudyWithZonesByPath(path);
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
+    }
+
+    public Study getStudyToUpdateStatus(Account account, String path) {
+        Study study = studyRepository.findStudyWithManagersByPath(path);
+        checkIfExistingStudy(path, study);
+        checkIfManager(account, study);
+        return study;
+    }
+
+    public void publish(Study study) {
+        study.publish();
+    }
+
+    public void close(Study study) {
+        study.close();
+    }
+
+    public void startRecruit(Study study) {
+        study.startRecruit();
+    }
+
+    public void stopRecruit(Study study) {
+        study.stopRecruiting();
     }
 
     private void checkIfManager(Account account, Study study) {
@@ -93,4 +117,24 @@ public class StudyService {
             throw new IllegalArgumentException(path + "에 해당하는 스터디가 없습니다.");
         }
     }
+
+    public boolean isValidPath(String path) {
+        if (!path.matches(StudyForm.VALID_PATH_PATTERN)) {
+            return false;
+        }
+        return !studyRepository.existsByPath(path);
+    }
+
+    public void updateStudyPath(Study study, String newPath) {
+        study.setPath(newPath);
+    }
+
+    public boolean isValidTitle(String newTitle) {
+        return newTitle.length() <= StudyForm.VALID_TITLE_LENGTH;
+    }
+
+    public void updateStudyTitle(Study study, String newTitle) {
+        study.setTitle(newTitle);
+    }
+
 }

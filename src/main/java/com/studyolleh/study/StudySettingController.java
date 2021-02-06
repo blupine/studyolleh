@@ -16,6 +16,7 @@ import com.studyolleh.zone.ZoneForm;
 import com.studyolleh.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dom4j.rule.Mode;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -179,6 +180,96 @@ public class StudySettingController {
         studyService.removeZone(study, zone);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/study")
+    public String studySettingForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        return "study/settings/study";
+    }
+
+    @PostMapping("study/publish")
+    public String publishStudy(@CurrentAccount Account account, @PathVariable String path, Model model,
+                               RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        studyService.publish(study);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        attributes.addFlashAttribute("message", "스터디를 공개했습니다.");
+        return "redirect:/study/"+ getPath(path) + "/settings/study";
+    }
+
+    @PostMapping("study/close")
+    public String closeStudy(@CurrentAccount Account account, @PathVariable String path, Model model,
+                             RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        studyService.close(study);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        attributes.addFlashAttribute("message", "스터디를 종료했습니다.");
+        return "redirect:/study/" + getPath(path) + "/settings/study";
+    }
+
+    @PostMapping("recruit/start")
+    public String startRecruit(@CurrentAccount Account account, @PathVariable String path, Model model,
+                               RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        if(!study.canUpdateRecruiting()){
+            attributes.addFlashAttribute("message", "인원 모집 설정은 한 시간에 한 번 변경 가능합니다.");
+            return "redirect:/study/"+ getPath(path) + "/settings/study";
+        }
+        studyService.startRecruit(study);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        attributes.addFlashAttribute("message", "스터디 인원 모집을 시작했습니다.");
+        return "redirect:/study/"+ getPath(path) + "/settings/study";
+    }
+
+    @PostMapping("recruit/stop")
+    public String stopRecruit(@CurrentAccount Account account, @PathVariable String path, Model model,
+                              RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        if(!study.canUpdateRecruiting()){
+            attributes.addFlashAttribute("message", "인원 모집 설정은 한 시간에 한 번 변경 가능합니다.");
+            return "redirect:/study/"+ getPath(path) + "/settings/study";
+        }
+        studyService.stopRecruit(study);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        attributes.addFlashAttribute("message", "스터디 인원 모집을 종료했습니다.");
+        return "redirect:/study/"+ getPath(path) + "/settings/study";
+    }
+
+    @PostMapping("study/path")
+    public String updatePath(@CurrentAccount Account account, @PathVariable String path, @RequestParam String newPath,
+                             Model model, RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        if (!studyService.isValidPath(newPath)) {
+            model.addAttribute(account);
+            model.addAttribute(study);
+            model.addAttribute("studyPathError", "해당 스터디 경로는 사용할 수 없습니다.");
+            return "study/settings/study";
+        }
+        studyService.updateStudyPath(study, newPath);
+        attributes.addFlashAttribute("message", "스터디 경로를 수정하였습니다.");
+        return "redirect:/study/" + getPath(newPath) + "/settings/study";
+    }
+
+    @PostMapping("study/title")
+    public String updateTitle(@CurrentAccount Account account, @PathVariable String path, @RequestParam String newTitle,
+                              Model model, RedirectAttributes attributes) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        if (!studyService.isValidTitle(newTitle)) {
+            model.addAttribute(account);
+            model.addAttribute(study);
+            model.addAttribute("studyTitleError", "해당 스터디 이름은 사용할 수 없습니다.");
+            return "study/settings/study";
+        }
+        studyService.updateStudyTitle(study, newTitle);
+        return "redirect:/study/" + getPath(path) + "/settings/study";
+    }
+
 
     private String getPath(String path) {
         return URLEncoder.encode(path, StandardCharsets.UTF_8);

@@ -22,6 +22,9 @@ import java.util.Set;
         @NamedAttributeNode("zones"),
         @NamedAttributeNode("managers")
 })
+@NamedEntityGraph(name = "Study.withManagers", attributeNodes = {
+        @NamedAttributeNode("managers")
+})
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @Builder @AllArgsConstructor @NoArgsConstructor
@@ -59,7 +62,7 @@ public class Study {
 
     private LocalDateTime closedDateTime;
 
-    private LocalDateTime recruitingUpDateTime;
+    private LocalDateTime recruitingUpdateDateTime;
 
     private boolean recruiting;
 
@@ -92,5 +95,46 @@ public class Study {
 
     public String getImage() {
         return this.image != null ? this.image : "/images/default_banner.png";
+    }
+
+    public void publish() {
+        if (!this.closed && !this.published) {
+            this.published = true;
+            this.publishedDateTime = LocalDateTime.now();
+        } else {
+            throw new IllegalArgumentException("스터디를 공개할 수 없는 상태입니다. 스터디를 이미 공개했거나 종료했습니다.");
+        }
+    }
+
+    public void close() {
+        if (!this.closed && this.published) {
+            this.closed = true;
+            this.closedDateTime = LocalDateTime.now();
+        } else {
+            throw new IllegalArgumentException("스터디를 종료할 수 없습니다. 이미 종료했거나 공개하지 않았습니다.");
+        }
+    }
+
+    public void startRecruit() {
+        if (canUpdateRecruiting()) {
+            this.recruiting = true;
+            this.recruitingUpdateDateTime = LocalDateTime.now();
+        } else {
+            throw new IllegalArgumentException("인원 모집을 시작할 수 없습니다. 스터디를 공개하지 않았거나 한시간 뒤 다시 시도하세요.");
+        }
+    }
+
+    public void stopRecruiting() {
+        if (canUpdateRecruiting()) {
+            this.recruiting = false;
+            this.recruitingUpdateDateTime = LocalDateTime.now();
+        }
+        else{
+            throw new IllegalArgumentException("인원 모집을 종료할 수 없습니다. 스터디를 공개하지 않았거나 한시간 뒤 다시 시도하세요.");
+        }
+    }
+
+    public boolean canUpdateRecruiting() {
+        return this.published && this.recruitingUpdateDateTime == null || this.recruitingUpdateDateTime.isBefore(LocalDateTime.now().minusHours(1));
     }
 }
