@@ -124,6 +124,56 @@ class StudyControllerTest {
         // then
     }
 
+    @Test
+    @WithAccount(testName)
+    @DisplayName("스터디 가입 - 실패(미공개, 모집중이지 않은 스터디)")
+    void joinStudy_fail() throws Exception {
+        Account account = createAccount("tempUser");
+        Study study = createStudy("test-study", account);
+
+        mockMvc.perform(get("/study/" + study.getEncodedPath() + "/join"))
+                .andExpect(status().isForbidden());
+
+        Account account2 = accountRepository.findByNickname(testName);
+        assertFalse(study.getMembers().contains(account2));
+    }
+
+    @Test
+    @WithAccount(testName)
+    @DisplayName("스터디 가입 - 성공")
+    void joinStudy() throws Exception {
+        Account account = createAccount("tempUser");
+        Study study = createStudy("test-study", account);
+        study.setPublished(true);
+        study.setRecruiting(true);
+
+        mockMvc.perform(get("/study/" + study.getEncodedPath() + "/join"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/study/" + study.getEncodedPath() + "/members"));
+
+        Account account2 = accountRepository.findByNickname(testName);
+        assertTrue(study.getMembers().contains(account2));
+    }
+
+    @Test
+    @WithAccount(testName)
+    @DisplayName("스터디 탈퇴")
+    void leaveStudy() throws Exception {
+        Account account = createAccount("tempUser");
+        Study study = createStudy("test-study", account);
+        study.setPublished(true);
+        study.setRecruiting(true);
+
+        Account account1 = accountRepository.findByNickname(testName);
+        studyService.addMember(study, account1);
+
+        mockMvc.perform(get("/study/" + study.getEncodedPath() + "/leave"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/study/" + study.getEncodedPath() + "/members"));
+
+        assertFalse(study.getMembers().contains(account1));
+    }
+
     protected Account createAccount(String nickname) {
         Account account = new Account();
         account.setNickname(nickname);
