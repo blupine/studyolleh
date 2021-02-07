@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -23,4 +24,11 @@ public class EventService {
         return eventRepository.save(event);
     }
 
+    public Event findEventById(Long id) {
+        return eventRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 모임입니다."));
+    }
+
+    public List<Event> findByStudyOrderByStartDateTime(Study study) {
+        return eventRepository.findByStudyOrderByStartDateTime(study);
+    }
 }

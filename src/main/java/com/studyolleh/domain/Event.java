@@ -10,10 +10,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Getter @Setter @EqualsAndHashCode(of = "id")
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
 public class Event {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @ManyToOne
@@ -41,7 +44,7 @@ public class Event {
     private LocalDateTime endDateTime;
 
     @Column
-    private Integer limitpOfEnrollments;
+    private Integer limitOfEnrollments;
 
     @OneToMany(mappedBy = "event")
     private List<Enrollment> enrollments;
@@ -81,4 +84,7 @@ public class Event {
         return false;
     }
 
+    public int numberOfRemainSpots() {
+        return this.limitOfEnrollments - (int) this.enrollments.stream().filter(Enrollment::isAccepted).count();
+    }
 }

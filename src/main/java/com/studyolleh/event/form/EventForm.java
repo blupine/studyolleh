@@ -31,5 +31,5 @@ public class EventForm {
     private LocalDateTime endDateTime;
 
     @Min(2)
-    private Integer limitpOfEnrollments = 2;
+    private Integer limitOfEnrollments = 2;
 }

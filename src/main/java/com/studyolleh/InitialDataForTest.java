@@ -20,21 +20,21 @@ public class InitialDataForTest {
     private final AccountRepository accountRepository;
     @Bean
     public void init() {
-        Account account = Account.builder()
-                .email("skwint11@gmail.com")
-                .nickname("blupine")
-                .password(passwordEncoder.encode("asdfasdf"))
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyUpdatedByWeb(true)
-                .build();
-
-        account.generateEmailCheckToken();
-        account.completeSignUp();
-        accountRepository.save(account);
-
-        Account byNickname = accountRepository.findByNickname("blupine");
-        System.out.println("byNickname.getNickname() = " + byNickname.getNickname());
+//        Account account = Account.builder()
+//                .email("skwint11@gmail.com")
+//                .nickname("blupine")
+//                .password(passwordEncoder.encode("asdfasdf"))
+//                .studyCreatedByWeb(true)
+//                .studyEnrollmentResultByWeb(true)
+//                .studyUpdatedByWeb(true)
+//                .build();
+//
+//        account.generateEmailCheckToken();
+//        account.completeSignUp();
+//        accountRepository.save(account);
+//
+//        Account byNickname = accountRepository.findByNickname("blupine");
+//        System.out.println("byNickname.getNickname() = " + byNickname.getNickname());
     }
 
 }

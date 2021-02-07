@@ -17,6 +17,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/study/{path}")
@@ -27,20 +30,10 @@ public class EventController {
     private final EventValidator eventValidator;
     private final StudyService studyService;
     private final ModelMapper modelMapper;
-    private final EventRepository eventRepository;
 
     @InitBinder("eventForm")
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(eventValidator);
-    }
-
-    @GetMapping("/events/{id}")
-    public String getEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id,
-                           Model model) {
-        model.addAttribute(account);
-        model.addAttribute(studyService.getStudy(path));
-        model.addAttribute(eventRepository.findById(id));
-        return "/event/view";
     }
 
     @GetMapping("/new-event")
@@ -64,5 +57,37 @@ public class EventController {
 
         Event event = eventService.createEvent(modelMapper.map(eventForm, Event.class), study, account);
         return "redirect:/study/" + study.getEncodedPath() + "/events/" + event.getId();
+    }
+
+    @GetMapping("/events/{id}")
+    public String getEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id,
+                           Model model) {
+        model.addAttribute(account);
+        model.addAttribute(studyService.getStudy(path));
+        model.addAttribute(eventService.findEventById(id));
+        return "/event/view";
+    }
+
+    @GetMapping("/events")
+    public String getEvents(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudy(path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        List<Event> eventList = eventService.findByStudyOrderByStartDateTime(study);
+
+        List<Event> newEvents = new ArrayList<>();
+        List<Event> oldEvents = new ArrayList<>();
+
+        eventList.forEach(e -> {
+            if (e.getEndDateTime().isBefore(LocalDateTime.now())) {
+                oldEvents.add(e);
+            } else {
+                newEvents.add(e);
+            }
+        });
+
+        model.addAttribute("oldEvents", oldEvents);
+        model.addAttribute("newEvents", newEvents);
+        return "study/events";
     }
 }
