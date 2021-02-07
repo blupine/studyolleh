@@ -27,10 +27,20 @@ public class EventController {
     private final EventValidator eventValidator;
     private final StudyService studyService;
     private final ModelMapper modelMapper;
+    private final EventRepository eventRepository;
 
     @InitBinder("eventForm")
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(eventValidator);
+    }
+
+    @GetMapping("/events/{id}")
+    public String getEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id,
+                           Model model) {
+        model.addAttribute(account);
+        model.addAttribute(studyService.getStudy(path));
+        model.addAttribute(eventRepository.findById(id));
+        return "/event/view";
     }
 
     @GetMapping("/new-event")
