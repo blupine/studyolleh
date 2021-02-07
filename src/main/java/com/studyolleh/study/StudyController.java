@@ -20,6 +20,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class StudyController {
 
+    private final StudyRepository studyRepository;
     private final StudyFormValidator studyFormValidator;
     private final StudyService studyService;
     private final ModelMapper modelMapper;
@@ -63,4 +64,17 @@ public class StudyController {
         return "study/members";
     }
 
+    @GetMapping("/study/{path}/join")
+    public String joinStudy(@CurrentAccount Account account, @PathVariable String path) {
+        Study study = studyRepository.findStudyWithMembersAndManagersByPath(path);
+        studyService.addMember(study, account);
+        return "redirect:/study/" + study.getEncodedPath() + "/members";
+    }
+
+    @GetMapping("/study/{path}/leave")
+    public String leaveStudy(@CurrentAccount Account account, @PathVariable String path) {
+        Study study = studyRepository.findStudyWithMembersAndManagersByPath(path);
+        studyService.removeMember(study, account);
+        return "redirect:/study/" + study.getEncodedPath() + "/members";
+    }
 }

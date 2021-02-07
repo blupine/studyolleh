@@ -145,4 +145,15 @@ public class StudyService {
         }
     }
 
+    public void addMember(Study study, Account account) {
+        if (study.isJoinable(account)) {
+            study.addMember(account);
+        } else {
+            throw new IllegalArgumentException("스터디에 가입할 수 없습니다.");
+        }
+    }
+
+    public void removeMember(Study study, Account account) {
+        study.removeMember(account);
+    }
 }
