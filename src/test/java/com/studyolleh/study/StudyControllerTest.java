@@ -4,8 +4,7 @@ import com.studyolleh.WithAccount;
 import com.studyolleh.account.AccountRepository;
 import com.studyolleh.domain.Account;
 import com.studyolleh.domain.Study;
-import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.AfterEach;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +24,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class StudyControllerTest {
 
-    @Autowired MockMvc mockMvc;
-    @Autowired StudyService studyService;
-    @Autowired StudyRepository studyRepository;
-    @Autowired AccountRepository accountRepository;
+    @Autowired protected MockMvc mockMvc;
+    @Autowired protected StudyService studyService;
+    @Autowired protected StudyRepository studyRepository;
+    @Autowired protected AccountRepository accountRepository;
 
-    private static final String testName = "testname";
+    protected static final String testName = "testname";
 
     @Test
     @WithAccount(testName)
@@ -125,5 +124,20 @@ class StudyControllerTest {
         // then
     }
 
+    protected Account createAccount(String nickname) {
+        Account account = new Account();
+        account.setNickname(nickname);
+        account.setEmail(nickname + "@email.com");
+        accountRepository.save(account);
 
+        return account;
+    }
+
+    protected Study createStudy(String path, Account account) {
+        Study study = new Study();
+        study.setPath(path);
+
+        studyService.createNewStudy(study, account);
+        return study;
+    }
 }

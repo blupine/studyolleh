@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.access.AccessDeniedException;
 
 @Service
 @Transactional
@@ -108,7 +109,7 @@ public class StudyService {
 
     private void checkIfManager(Account account, Study study) {
         if (!account.isManagerOf(study)) {
-            throw new IllegalArgumentException("해당 기능을 사용할 수 없습니다.");
+            throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
         }
     }
 
@@ -149,7 +150,7 @@ public class StudyService {
         if (study.isJoinable(account)) {
             study.addMember(account);
         } else {
-            throw new IllegalArgumentException("스터디에 가입할 수 없습니다.");
+            throw new AccessDeniedException("스터디에 가입할 수 없습니다.");
         }
     }
 
