@@ -121,4 +121,12 @@ public class EventController {
         eventService.updateEvent(event, eventForm);
         return "redirect:/study/" + study.getEncodedPath() + "/events/" + event.getId();
     }
+
+    @DeleteMapping("/events/{id}")
+    public String deleteEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        Event event = eventService.findEventById(id);
+        eventService.deleteEvent(event);
+        return "redirect:/study/" + study.getEncodedPath() + "/events";
+    }
 }

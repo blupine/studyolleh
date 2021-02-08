@@ -39,4 +39,8 @@ public class EventService {
         modelMapper.map(eventForm, event);
         // TODO : 모집 방식이 선착순이고, 모집 인원이 늘어났을 경우에 늘어난 모집 인원만큼 지원자들의 참가 신청 상태를 확정 상태로 변경해야 함
     }
+
+    public void deleteEvent(Event event) {
+        eventRepository.delete(event);
+    }
 }
