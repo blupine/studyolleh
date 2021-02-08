@@ -63,11 +63,12 @@ public class EventController {
     public String getEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id,
                            Model model) {
         model.addAttribute(account);
-        model.addAttribute(studyService.getStudy(path));
+        model.addAttribute(studyService.getStudy(path)); // TODO : getStudy만 해도 괜찮은가?
         model.addAttribute(eventService.findEventById(id));
         return "/event/view";
     }
 
+    // TODO : N+1 Problem
     @GetMapping("/events")
     public String getEvents(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudy(path);
