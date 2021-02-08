@@ -157,4 +157,8 @@ public class StudyService {
     public void removeMember(Study study, Account account) {
         study.removeMember(account);
     }
+
+    public Study findStudyWithManagersByPath(String path) {
+        return studyRepository.findStudyWithManagersByPath(path);
+    }
 }

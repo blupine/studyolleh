@@ -9,6 +9,7 @@ import com.studyolleh.event.validator.EventValidator;
 import com.studyolleh.study.StudyRepository;
 import com.studyolleh.study.StudyService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping("/study/{path}")
 @RequiredArgsConstructor
@@ -63,7 +65,7 @@ public class EventController {
     public String getEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id,
                            Model model) {
         model.addAttribute(account);
-        model.addAttribute(studyService.getStudy(path)); // TODO : getStudy만 해도 괜찮은가?
+        model.addAttribute(studyService.findStudyWithManagersByPath(path));
         model.addAttribute(eventService.findEventById(id));
         return "/event/view";
     }
