@@ -42,7 +42,7 @@ public class StudySettingController {
 
     @GetMapping("/description")
     public String viewStudySetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Study study = studyService.getStudyByPathToUpdate(account, path);
+        Study study = studyService.getStudyToUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(study);
         model.addAttribute(modelMapper.map(study, StudyDescriptionForm.class));
@@ -54,7 +54,7 @@ public class StudySettingController {
                                   @Valid StudyDescriptionForm studyDescriptionForm,
                                   Errors errors, Model model, RedirectAttributes redirectAttributes) {
 
-        Study study = studyService.getStudyByPathToUpdate(account, path);
+        Study study = studyService.getStudyToUpdate(account, path);
 
         if(errors.hasErrors()){
             model.addAttribute(account);
@@ -69,7 +69,7 @@ public class StudySettingController {
 
     @GetMapping("/banner")
     public String viewBannerSetting(@CurrentAccount Account account, @PathVariable String path, Model model) {
-        Study study = studyService.getStudyByPathToUpdate(account, path);
+        Study study = studyService.getStudyToUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(study);
         return "study/settings/banner";
@@ -78,7 +78,7 @@ public class StudySettingController {
     @PostMapping("/banner")
     public String updateBannerSetting(@CurrentAccount Account account, @PathVariable String path,
                                       String image, RedirectAttributes redirectAttributes) {
-        Study study = studyService.getStudyByPathToUpdate(account, path);
+        Study study = studyService.getStudyToUpdate(account, path);
         studyService.updateStudyImage(study, image);
         redirectAttributes.addFlashAttribute("message", "스터디 이미지를 수정했습니다");
         return "redirect:/study/" + study.getEncodedPath() + "/settings/banner";
@@ -86,14 +86,14 @@ public class StudySettingController {
 
     @PostMapping("/banner/enable")
     public String enableBannerSetting(@CurrentAccount Account account, @PathVariable String path){
-        Study study = studyService.getStudyByPathToUpdate(account, path);
+        Study study = studyService.getStudyToUpdate(account, path);
         studyService.enableStudyBanner(study);
         return "redirect:/study/" + study.getEncodedPath() + "/settings/banner";
     }
 
     @PostMapping("/banner/disable")
     public String disableBannerSetting(@CurrentAccount Account account, @PathVariable String path){
-        Study study = studyService.getStudyByPathToUpdate(account, path);
+        Study study = studyService.getStudyToUpdate(account, path);
         studyService.disableStudyBanner(study);
         return "redirect:/study/" + study.getEncodedPath() + "/settings/banner";
     }
@@ -101,7 +101,7 @@ public class StudySettingController {
     @GetMapping("/tags")
     public String studyTagsForm(@CurrentAccount Account account, @PathVariable String path, Model model)
             throws JsonProcessingException {
-        Study study = studyService.getStudyByPathToUpdate(account, path);
+        Study study = studyService.getStudyToUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(study);
 
@@ -126,7 +126,7 @@ public class StudySettingController {
 
     @PostMapping("/tags/remove")
     public ResponseEntity removeTag(@CurrentAccount Account account, @PathVariable String path, @RequestBody TagForm tagForm) {
-        Study study = studyService.getStudyByPathToUpdate(account, path);
+        Study study = studyService.getStudyToUpdate(account, path);
         Tag tag = tagRepository.findByTitle(tagForm.getTagTitle());
         if (tag == null) {
             return ResponseEntity.badRequest().build();
@@ -139,7 +139,7 @@ public class StudySettingController {
     @GetMapping("/zones")
     public String studyZonesForm(@CurrentAccount Account account, @PathVariable String path, Model model)
             throws JsonProcessingException {
-        Study study = studyService.getStudyByPathToUpdate(account, path);
+        Study study = studyService.getStudyToUpdate(account, path);
         model.addAttribute(account);
         model.addAttribute(study);
 

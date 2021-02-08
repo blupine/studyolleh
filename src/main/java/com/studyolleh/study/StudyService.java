@@ -32,7 +32,7 @@ public class StudyService {
         return study;
     }
 
-    public Study getStudyByPathToUpdate(Account account, String path) {
+    public Study getStudyToUpdate(Account account, String path) {
         Study study = this.getStudy(path);
         checkIfManager(account, study);
         return study;

@@ -1,5 +1,6 @@
 package com.studyolleh.event.validator;
 
+import com.studyolleh.domain.Event;
 import com.studyolleh.event.EventRepository;
 import com.studyolleh.event.form.EventForm;
 import lombok.RequiredArgsConstructor;
@@ -50,4 +51,9 @@ public class EventValidator implements Validator {
         return endDateTime.isBefore(eventForm.getStartDateTime()) || endDateTime.isBefore(eventForm.getEndEnrollmentDateTime());
     }
 
+    public void validateUpdateForm(EventForm eventForm, Event event, Errors errors) {
+        if (eventForm.getLimitOfEnrollments() < event.getNumberOfAcceptedEnrollments()) {
+            errors.rejectValue("limitOfEnrollments", "wrong.value", "확정된 참가 신청보다 모집 인원 수가 커야 합니다.");
+        }
+    }
 }

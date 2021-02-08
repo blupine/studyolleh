@@ -6,7 +6,6 @@ import com.studyolleh.domain.Event;
 import com.studyolleh.domain.Study;
 import com.studyolleh.event.form.EventForm;
 import com.studyolleh.event.validator.EventValidator;
-import com.studyolleh.study.StudyRepository;
 import com.studyolleh.study.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -70,7 +69,6 @@ public class EventController {
         return "/event/view";
     }
 
-    // TODO : N+1 Problem
     @GetMapping("/events")
     public String getEvents(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudy(path);
@@ -92,5 +90,35 @@ public class EventController {
         model.addAttribute("oldEvents", oldEvents);
         model.addAttribute("newEvents", newEvents);
         return "study/events";
+    }
+
+    @GetMapping("/events/{id}/edit")
+    public String editEventForm(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id,
+                                Model model) {
+        Event event = eventService.findEventById(id);
+        Study study = studyService.findStudyWithManagersByPath(path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+        model.addAttribute(event);
+        model.addAttribute(modelMapper.map(event, EventForm.class));
+        return "event/update-form";
+    }
+
+    @PostMapping("/events/{id}/edit")
+    public String updateEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable Long id,
+                              @Valid EventForm eventForm, Errors errors, Model model) {
+
+        Study study = studyService.getStudyToUpdate(account, path);
+        Event event = eventService.findEventById(id);
+        eventForm.setEventType(event.getEventType());
+        eventValidator.validateUpdateForm(eventForm, event, errors);
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            model.addAttribute(study);
+            model.addAttribute(event);
+            return "event/update-form";
+        }
+        eventService.updateEvent(event, eventForm);
+        return "redirect:/study/" + study.getEncodedPath() + "/events/" + event.getId();
     }
 }
