@@ -1,9 +1,7 @@
 package com.studyolleh.event.validator;
 
 import com.studyolleh.domain.Event;
-import com.studyolleh.event.EventRepository;
 import com.studyolleh.event.form.EventForm;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -11,10 +9,7 @@ import org.springframework.validation.Validator;
 import java.time.LocalDateTime;
 
 @Component
-@RequiredArgsConstructor
 public class EventValidator implements Validator {
-
-    private final EventRepository eventRepository;
 
     @Override
     public boolean supports(Class<?> clazz) {

@@ -161,4 +161,10 @@ public class StudyService {
     public Study findStudyWithManagersByPath(String path) {
         return studyRepository.findStudyWithManagersByPath(path);
     }
+
+    public Study findStudyToEnroll(String path) {
+        Study study = studyRepository.findStudyOnlyByPath(path);
+        checkIfExistingStudy(path, study);
+        return study;
+    }
 }

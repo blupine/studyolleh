@@ -23,7 +23,7 @@ public class Enrollment {
     @ManyToOne
     private Account account;
 
-    private LocalDateTime enrollmentAt;
+    private LocalDateTime enrolledAt;
 
     private boolean accepted;
 
