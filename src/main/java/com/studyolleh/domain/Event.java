@@ -53,17 +53,18 @@ public class Event {
     private Integer limitOfEnrollments;
 
     @OneToMany(mappedBy = "event")
+    @OrderBy("enrolledAt")
     private List<Enrollment> enrollments = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private EventType eventType;
 
     public boolean isEnrollableFor(UserAccount userAccount) {
-        return isNotClosed() && !isAlreadyEnrolled(userAccount);
+        return isNotClosed() && !isAttended(userAccount) && !isAlreadyEnrolled(userAccount);
     }
 
     public boolean isDisenrollableFor(UserAccount uesrAccount) {
-        return isNotClosed() && isAlreadyEnrolled(uesrAccount);
+        return isNotClosed() && !isAttended(uesrAccount) && isAlreadyEnrolled(uesrAccount);
     }
 
     public boolean isAttended(UserAccount userAccount) {
@@ -115,6 +116,7 @@ public class Event {
     public boolean canAccept(Enrollment enrollment) {
         return this.eventType == EventType.CONFIRMATIVE
                 && this.enrollments.contains(enrollment)
+                && this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments()
                 && !enrollment.isAccepted()
                 && !enrollment.isAttended();
     }
