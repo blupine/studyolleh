@@ -1,6 +1,7 @@
 package com.studyolleh.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.modules.tag.Tag;
 import com.studyolleh.modules.zone.Zone;
 import com.studyolleh.modules.tag.TagForm;
@@ -25,11 +26,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 class SettingControllerTest {
 
-    static final String testName = "testName";
+    static final String testName = "teeeessstt";
 
     @Autowired MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;

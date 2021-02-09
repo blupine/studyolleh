@@ -1,12 +1,17 @@
 package com.studyolleh.modules.event;
 
+import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.modules.account.Account;
+import com.studyolleh.modules.account.AccountFactory;
+import com.studyolleh.modules.account.AccountRepository;
 import com.studyolleh.modules.account.WithAccount;
 import com.studyolleh.modules.study.Study;
 import com.studyolleh.modules.study.StudyControllerTest;
+import com.studyolleh.modules.study.StudyFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
 
@@ -15,18 +20,24 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-class EventControllerTest extends StudyControllerTest {
+@MockMvcTest
+class EventControllerTest {
 
+    private static final String testName = "teeessttt";
+    @Autowired MockMvc mockMvc;
+    @Autowired AccountFactory accountFactory;
+    @Autowired StudyFactory studyFactory;
     @Autowired EventService eventService;
     @Autowired EventRepository eventRepository;
     @Autowired EnrollmentRepository enrollmentRepository;
+    @Autowired AccountRepository accountRepository;
 
     @Test
     @WithAccount(testName)
     @DisplayName("선착순 모임에 참가 신청 - 자동 수락")
     void 선착순_모임에_참가신청_자동수락() throws Exception {
-        Account test1 = createAccount("test1");
-        Study study = createStudy("test-path", test1);
+        Account test1 = accountFactory.createAccount("test1");
+        Study study = studyFactory.createStudy("test-path", test1);
         Event event = createEvent("test-event", EventType.FCFS, 2, study, test1);
 
         mockMvc.perform(post("/study/" + study.getEncodedPath() + "/events/" + event.getId() + "/enroll")
@@ -43,12 +54,12 @@ class EventControllerTest extends StudyControllerTest {
     @DisplayName("선착순 모임에 참가 신청 - 대기중(이미 인원이 다 찼을 경우)")
     void 선착순_모임에_참가신청_대기중_인원이_이미_다_참() throws Exception{
         // given
-        Account test1 = createAccount("test1");
-        Study study = createStudy("test-path", test1);
+        Account test1 = accountFactory.createAccount("test1");
+        Study study = studyFactory.createStudy("test-path", test1);
         Event event = createEvent("test-event", EventType.FCFS, 2, study, test1);
 
-        Account test2 = createAccount("test2");
-        Account test3 = createAccount("test3");
+        Account test2 = accountFactory.createAccount("test2");
+        Account test3 = accountFactory.createAccount("test3");
         eventService.newEnrollment(event, test2);
         eventService.newEnrollment(event, test3);
 
@@ -68,9 +79,9 @@ class EventControllerTest extends StudyControllerTest {
     void 선착순_모임의_참가신청_확정자가_신청을_취소할_경우() throws Exception {
         // given
         Account account = accountRepository.findByNickname(testName);
-        Account test1 = createAccount("test1");
-        Account test2 = createAccount("test2");
-        Study study = createStudy("test-path", test1);
+        Account test1 = accountFactory.createAccount("test1");
+        Account test2 = accountFactory.createAccount("test2");
+        Study study = studyFactory.createStudy("test-path", test1);
         Event event = createEvent("test-event", EventType.FCFS, 2, study, test1);
 
         eventService.newEnrollment(event, test1);
@@ -99,9 +110,9 @@ class EventControllerTest extends StudyControllerTest {
     void 참가신청_비확정자가_취소할경우_변함없음() throws Exception {
         // given
         Account account = accountRepository.findByNickname(testName);
-        Account test1 = createAccount("test1");
-        Account test2 = createAccount("test2");
-        Study study = createStudy("test-path", test1);
+        Account test1 = accountFactory.createAccount("test1");
+        Account test2 = accountFactory.createAccount("test2");
+        Study study = studyFactory.createStudy("test-path", test1);
         Event event = createEvent("test-event", EventType.FCFS, 2, study, test1);
 
         eventService.newEnrollment(event, test1);
@@ -128,8 +139,8 @@ class EventControllerTest extends StudyControllerTest {
     @DisplayName("관리자 확인 모임에 참가신청 - 대기중")
     void 관리자_확인_모임에_참가신청_대기중() throws Exception {
         Account account = accountRepository.findByNickname(testName);
-        Account test1 = createAccount("test1");
-        Study study = createStudy("test-path", test1);
+        Account test1 = accountFactory.createAccount("test1");
+        Study study = studyFactory.createStudy("test-path", test1);
         Event event = createEvent("test-event", EventType.CONFIRMATIVE, 2, study, test1);
 
         // when & then

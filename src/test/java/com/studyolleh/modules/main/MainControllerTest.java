@@ -1,5 +1,6 @@
 package com.studyolleh.modules.main;
 
+import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.modules.account.AccountRepository;
 import com.studyolleh.modules.account.AccountService;
 import com.studyolleh.modules.account.form.SignUpForm;
@@ -18,8 +19,7 @@ import static org.springframework.security.test.web.servlet.response.SecurityMoc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 class MainControllerTest {
 
     @Autowired MockMvc mockMvc;

@@ -1,0 +1,13 @@
+1612882658130|102|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists account_tags CASCADE |     drop table if exists account_tags CASCADE 
+1612882658130|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists account_zones CASCADE |     drop table if exists account_zones CASCADE 
+1612882658131|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists enrollment CASCADE |     drop table if exists enrollment CASCADE 
+1612882658131|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists event CASCADE |     drop table if exists event CASCADE 
+1612882658131|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists persistent_logins CASCADE |     drop table if exists persistent_logins CASCADE 
+1612882658131|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists study CASCADE |     drop table if exists study CASCADE 
+1612882658132|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists study_managers CASCADE |     drop table if exists study_managers CASCADE 
+1612882658132|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists study_members CASCADE |     drop table if exists study_members CASCADE 
+1612882658132|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists study_tags CASCADE |     drop table if exists study_tags CASCADE 
+1612882658132|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists study_zones CASCADE |     drop table if exists study_zones CASCADE 
+1612882658133|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists tag CASCADE |     drop table if exists tag CASCADE 
+1612882658133|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop table if exists zone CASCADE |     drop table if exists zone CASCADE 
+1612882658133|0|statement|connection 31|url jdbc:h2:tcp://localhost/~/study-olleh|     drop sequence if exists hibernate_sequence|     drop sequence if exists hibernate_sequence

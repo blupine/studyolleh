@@ -1,5 +1,6 @@
 package com.studyolleh.modules.account;
 
+import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.infra.mail.EmailMessage;
 import com.studyolleh.infra.mail.EmailService;
 import org.junit.jupiter.api.DisplayName;
@@ -20,21 +21,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@Transactional
+@MockMvcTest
 class AccountControllerTest {
 
     private static final String testNickname = "testnick";
-    private static final String testEmail = "skwint11@naver.com";
+    private static final String testEmail = "skwint11@test.com";
     private static final String testFailEmail = "asdfsadf";
     private static final String testPassword = "12341234";
 
-    @Autowired private MockMvc mockMvc;
-    @Autowired private AccountRepository accountRepository;
-
-    @MockBean
-    private EmailService emailService;
+    @Autowired MockMvc mockMvc;
+    @Autowired AccountRepository accountRepository;
+    @MockBean EmailService emailService;
 
     @DisplayName("회원 가입 화면 테스트")
     @Test

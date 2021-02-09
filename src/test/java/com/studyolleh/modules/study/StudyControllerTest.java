@@ -1,5 +1,7 @@
 package com.studyolleh.modules.study;
 
+import com.studyolleh.infra.MockMvcTest;
+import com.studyolleh.modules.account.AccountFactory;
 import com.studyolleh.modules.account.WithAccount;
 import com.studyolleh.modules.account.AccountRepository;
 import com.studyolleh.modules.account.Account;
@@ -18,15 +20,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 public class StudyControllerTest {
 
-    @Autowired protected MockMvc mockMvc;
-    @Autowired protected StudyService studyService;
-    @Autowired protected StudyRepository studyRepository;
-    @Autowired protected AccountRepository accountRepository;
+    @Autowired MockMvc mockMvc;
+    @Autowired StudyService studyService;
+    @Autowired StudyRepository studyRepository;
+    @Autowired AccountRepository accountRepository;
+    @Autowired AccountFactory accountFactory;
+    @Autowired StudyFactory studyFactory;
 
     protected static final String testName = "testname";
 
@@ -127,8 +129,8 @@ public class StudyControllerTest {
     @WithAccount(testName)
     @DisplayName("스터디 가입 - 실패(미공개, 모집중이지 않은 스터디)")
     void joinStudy_fail() throws Exception {
-        Account account = createAccount("tempUser");
-        Study study = createStudy("test-study", account);
+        Account account = accountFactory.createAccount("tempUser");
+        Study study = studyFactory.createStudy("test-study", account);
 
         mockMvc.perform(get("/study/" + study.getEncodedPath() + "/join"))
                 .andExpect(status().isForbidden());
@@ -141,8 +143,8 @@ public class StudyControllerTest {
     @WithAccount(testName)
     @DisplayName("스터디 가입 - 성공")
     void joinStudy() throws Exception {
-        Account account = createAccount("tempUser");
-        Study study = createStudy("test-study", account);
+        Account account = accountFactory.createAccount("tempUser");
+        Study study = studyFactory.createStudy("test-study", account);
         study.setPublished(true);
         study.setRecruiting(true);
 
@@ -158,8 +160,8 @@ public class StudyControllerTest {
     @WithAccount(testName)
     @DisplayName("스터디 탈퇴")
     void leaveStudy() throws Exception {
-        Account account = createAccount("tempUser");
-        Study study = createStudy("test-study", account);
+        Account account = accountFactory.createAccount("tempUser");
+        Study study = studyFactory.createStudy("test-study", account);
         study.setPublished(true);
         study.setRecruiting(true);
 
@@ -171,22 +173,5 @@ public class StudyControllerTest {
                 .andExpect(redirectedUrl("/study/" + study.getEncodedPath() + "/members"));
 
         assertFalse(study.getMembers().contains(account1));
-    }
-
-    protected Account createAccount(String nickname) {
-        Account account = new Account();
-        account.setNickname(nickname);
-        account.setEmail(nickname + "@email.com");
-        accountRepository.save(account);
-
-        return account;
-    }
-
-    protected Study createStudy(String path, Account account) {
-        Study study = new Study();
-        study.setPath(path);
-
-        studyService.createNewStudy(study, account);
-        return study;
     }
 }
