@@ -1,12 +1,8 @@
-package com.studyolleh.modules.settings;
+package com.studyolleh.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.studyolleh.WithAccount;
-import com.studyolleh.modules.account.AccountRepository;
-import com.studyolleh.modules.account.AccountService;
-import com.studyolleh.modules.domain.Account;
-import com.studyolleh.modules.domain.Tag;
-import com.studyolleh.modules.domain.Zone;
+import com.studyolleh.modules.tag.Tag;
+import com.studyolleh.modules.zone.Zone;
 import com.studyolleh.modules.tag.TagForm;
 import com.studyolleh.modules.zone.ZoneForm;
 import com.studyolleh.modules.tag.TagRepository;
@@ -23,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.studyolleh.modules.settings.SettingController.*;
+import static com.studyolleh.modules.account.SettingController.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

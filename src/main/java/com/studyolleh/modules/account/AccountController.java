@@ -2,7 +2,6 @@ package com.studyolleh.modules.account;
 
 import com.studyolleh.modules.account.form.SignUpForm;
 import com.studyolleh.modules.account.validator.SignUpFormValidator;
-import com.studyolleh.modules.domain.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

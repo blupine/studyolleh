@@ -1,6 +1,5 @@
 package com.studyolleh.modules.account;
 
-import com.studyolleh.modules.domain.Account;
 import com.studyolleh.infra.mail.EmailMessage;
 import com.studyolleh.infra.mail.EmailService;
 import org.junit.jupiter.api.DisplayName;

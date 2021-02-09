@@ -1,6 +1,9 @@
-package com.studyolleh.modules.domain;
+package com.studyolleh.modules.study;
 
+import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.account.UserAccount;
+import com.studyolleh.modules.tag.Tag;
+import com.studyolleh.modules.zone.Zone;
 import lombok.*;
 
 import javax.persistence.*;
@@ -158,5 +161,9 @@ public class Study {
 
     public String getEncodedPath() {
         return URLEncoder.encode(this.path, StandardCharsets.UTF_8);
+    }
+
+    public boolean isManagedBy(Account account) {
+        return this.managers.contains(account);
     }
 }

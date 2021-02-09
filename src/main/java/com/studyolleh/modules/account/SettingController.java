@@ -1,15 +1,18 @@
-package com.studyolleh.modules.settings;
+package com.studyolleh.modules.account;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolleh.modules.account.AccountService;
 import com.studyolleh.modules.account.CurrentAccount;
-import com.studyolleh.modules.domain.Account;
-import com.studyolleh.modules.domain.Tag;
-import com.studyolleh.modules.domain.Zone;
-import com.studyolleh.modules.settings.form.*;
-import com.studyolleh.modules.settings.validator.NicknameValidator;
-import com.studyolleh.modules.settings.validator.PasswordFormValidator;
+import com.studyolleh.modules.account.Account;
+import com.studyolleh.modules.account.form.NicknameForm;
+import com.studyolleh.modules.account.form.Notifications;
+import com.studyolleh.modules.account.form.PasswordForm;
+import com.studyolleh.modules.account.form.Profile;
+import com.studyolleh.modules.tag.Tag;
+import com.studyolleh.modules.zone.Zone;
+import com.studyolleh.modules.account.validator.NicknameValidator;
+import com.studyolleh.modules.account.validator.PasswordFormValidator;
 import com.studyolleh.modules.tag.TagForm;
 import com.studyolleh.modules.tag.TagRepository;
 import com.studyolleh.modules.tag.TagService;

@@ -1,4 +1,4 @@
-package com.studyolleh.modules.domain;
+package com.studyolleh.modules.event;
 
 public enum EventType {
     FCFS, CONFIRMATIVE

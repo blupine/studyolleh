@@ -1,6 +1,8 @@
-package com.studyolleh.modules.domain;
+package com.studyolleh.modules.study;
 
+import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.account.UserAccount;
+import com.studyolleh.modules.study.Study;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

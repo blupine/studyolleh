@@ -1,6 +1,5 @@
 package com.studyolleh.modules.zone;
 
-import com.studyolleh.modules.domain.Zone;
 import lombok.Data;
 
 @Data

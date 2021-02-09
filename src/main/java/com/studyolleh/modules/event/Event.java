@@ -1,6 +1,8 @@
-package com.studyolleh.modules.domain;
+package com.studyolleh.modules.event;
 
+import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.account.UserAccount;
+import com.studyolleh.modules.study.Study;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;

@@ -1,8 +1,7 @@
 package com.studyolleh.modules.study;
 
-import com.studyolleh.WithAccount;
-import com.studyolleh.modules.domain.Account;
-import com.studyolleh.modules.domain.Study;
+import com.studyolleh.modules.account.WithAccount;
+import com.studyolleh.modules.account.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

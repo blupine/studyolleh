@@ -1,9 +1,8 @@
 package com.studyolleh.modules.study;
 
-import com.studyolleh.modules.domain.Account;
-import com.studyolleh.modules.domain.Study;
-import com.studyolleh.modules.domain.Tag;
-import com.studyolleh.modules.domain.Zone;
+import com.studyolleh.modules.account.Account;
+import com.studyolleh.modules.tag.Tag;
+import com.studyolleh.modules.zone.Zone;
 import com.studyolleh.modules.study.form.StudyDescriptionForm;
 import com.studyolleh.modules.study.form.StudyForm;
 import lombok.RequiredArgsConstructor;
@@ -108,7 +107,7 @@ public class StudyService {
     }
 
     private void checkIfManager(Account account, Study study) {
-        if (!account.isManagerOf(study)) {
+        if (!study.isManagedBy(account)) {
             throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
         }
     }

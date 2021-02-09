@@ -1,8 +1,6 @@
 package com.studyolleh.modules.event;
 
-import com.studyolleh.modules.domain.Account;
-import com.studyolleh.modules.domain.Enrollment;
-import com.studyolleh.modules.domain.Event;
+import com.studyolleh.modules.account.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Long> {

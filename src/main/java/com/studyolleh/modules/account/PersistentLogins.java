@@ -1,4 +1,4 @@
-package com.studyolleh.modules.domain;
+package com.studyolleh.modules.account;
 
 import lombok.Getter;
 import lombok.Setter;

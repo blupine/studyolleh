@@ -1,6 +1,6 @@
-package com.studyolleh.modules.settings.validator;
+package com.studyolleh.modules.account.validator;
 
-import com.studyolleh.modules.settings.form.PasswordForm;
+import com.studyolleh.modules.account.form.PasswordForm;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

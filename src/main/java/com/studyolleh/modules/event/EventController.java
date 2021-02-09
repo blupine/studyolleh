@@ -1,10 +1,8 @@
 package com.studyolleh.modules.event;
 
 import com.studyolleh.modules.account.CurrentAccount;
-import com.studyolleh.modules.domain.Account;
-import com.studyolleh.modules.domain.Enrollment;
-import com.studyolleh.modules.domain.Event;
-import com.studyolleh.modules.domain.Study;
+import com.studyolleh.modules.account.Account;
+import com.studyolleh.modules.study.Study;
 import com.studyolleh.modules.event.form.EventForm;
 import com.studyolleh.modules.event.validator.EventValidator;
 import com.studyolleh.modules.study.StudyService;

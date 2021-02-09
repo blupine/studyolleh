@@ -1,6 +1,5 @@
-package com.studyolleh;
+package com.studyolleh.modules.account;
 
-import com.studyolleh.modules.account.AccountService;
 import com.studyolleh.modules.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

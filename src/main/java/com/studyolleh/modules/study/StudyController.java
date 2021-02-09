@@ -1,8 +1,7 @@
 package com.studyolleh.modules.study;
 
 import com.studyolleh.modules.account.CurrentAccount;
-import com.studyolleh.modules.domain.Account;
-import com.studyolleh.modules.domain.Study;
+import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.study.form.StudyForm;
 import com.studyolleh.modules.study.validator.StudyFormValidator;
 import lombok.RequiredArgsConstructor;

@@ -2,13 +2,12 @@ package com.studyolleh.modules.account;
 
 import com.studyolleh.modules.account.form.SignUpForm;
 import com.studyolleh.infra.config.AppProperties;
-import com.studyolleh.modules.domain.Account;
-import com.studyolleh.modules.domain.Tag;
-import com.studyolleh.modules.domain.Zone;
+import com.studyolleh.modules.tag.Tag;
+import com.studyolleh.modules.zone.Zone;
 import com.studyolleh.infra.mail.EmailMessage;
 import com.studyolleh.infra.mail.EmailService;
-import com.studyolleh.modules.settings.form.Notifications;
-import com.studyolleh.modules.settings.form.Profile;
+import com.studyolleh.modules.account.form.Notifications;
+import com.studyolleh.modules.account.form.Profile;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

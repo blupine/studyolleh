@@ -1,7 +1,7 @@
 package com.studyolleh.modules.main;
 
 import com.studyolleh.modules.account.CurrentAccount;
-import com.studyolleh.modules.domain.Account;
+import com.studyolleh.modules.account.Account;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

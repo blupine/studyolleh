@@ -1,6 +1,6 @@
 package com.studyolleh.modules.event.form;
 
-import com.studyolleh.modules.domain.EventType;
+import com.studyolleh.modules.event.EventType;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;

@@ -1,6 +1,5 @@
 package com.studyolleh.modules.account;
 
-import com.studyolleh.modules.domain.Account;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

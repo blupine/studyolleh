@@ -1,4 +1,4 @@
-package com.studyolleh;
+package com.studyolleh.modules.account;
 
 import org.springframework.security.test.context.support.WithSecurityContext;
 

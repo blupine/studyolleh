@@ -1,7 +1,8 @@
 package com.studyolleh.modules.event;
 
-import com.studyolleh.WithAccount;
-import com.studyolleh.modules.domain.*;
+import com.studyolleh.modules.account.Account;
+import com.studyolleh.modules.account.WithAccount;
+import com.studyolleh.modules.study.Study;
 import com.studyolleh.modules.study.StudyControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

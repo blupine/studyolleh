@@ -1,5 +1,8 @@
-package com.studyolleh.modules.domain;
+package com.studyolleh.modules.account;
 
+import com.studyolleh.modules.study.Study;
+import com.studyolleh.modules.tag.Tag;
+import com.studyolleh.modules.zone.Zone;
 import lombok.*;
 
 import javax.persistence.*;
@@ -77,9 +80,5 @@ public class Account {
 
     public boolean canSendConfirmEmail() {
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
-    }
-
-    public boolean isManagerOf(Study study) {
-        return study.getManagers().contains(this);
     }
 }
