@@ -1,12 +1,12 @@
 package com.studyolleh.modules.event;
 
+import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.account.AccountFactory;
 import com.studyolleh.modules.account.AccountRepository;
 import com.studyolleh.modules.account.WithAccount;
 import com.studyolleh.modules.study.Study;
-import com.studyolleh.modules.study.StudyControllerTest;
 import com.studyolleh.modules.study.StudyFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,9 +21,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-class EventControllerTest {
+class EventControllerTest extends AbstractContainerBaseTest {
 
-    private static final String testName = "teeessttt";
     @Autowired MockMvc mockMvc;
     @Autowired AccountFactory accountFactory;
     @Autowired StudyFactory studyFactory;

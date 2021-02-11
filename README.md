@@ -17,3 +17,17 @@ spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.timeout=5000
 spring.mail.properties.mail.smtp.starttls.enable=true
 ```
+
+### 2. Setting Database
+```shell
+# 1. Install postgresql Database
+brew install postgres
+
+# 2. Start Service
+brew services start postgresql
+
+# 3. Create User & Database
+psql -h localhost -d postgres
+postgres=# CREATE USER testuser PASSWORD 'testpass' SUPERUSER;
+postgres=# CREATE DATABASE testdb OWNER testuser;
+```

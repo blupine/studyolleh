@@ -171,7 +171,4 @@ public class EventController {
         eventService.cancelCheckInEnrollment(enrollment);
         return "redirect:/study/" + study.getEncodedPath() + "/events/" + event.getId();
     }
-
-
-
 }

@@ -1,25 +1,25 @@
 package com.studyolleh.modules.study;
 
+import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.modules.account.AccountFactory;
+import com.studyolleh.modules.account.AccountRepository;
 import com.studyolleh.modules.account.WithAccount;
 import com.studyolleh.modules.account.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-@RequestMapping("/study/{path}/settings")
-class StudySettingControllerTest extends StudyControllerTest{
+class StudySettingControllerTest extends AbstractContainerBaseTest {
 
+    @Autowired MockMvc mockMvc;
+    @Autowired AccountRepository accountRepository;
     @Autowired AccountFactory accountFactory;
     @Autowired StudyFactory studyFactory;
 

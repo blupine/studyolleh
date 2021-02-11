@@ -1,6 +1,7 @@
 package com.studyolleh.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.modules.tag.Tag;
 import com.studyolleh.modules.zone.Zone;
@@ -27,9 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-class SettingControllerTest {
-
-    static final String testName = "teeeessstt";
+class SettingControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;

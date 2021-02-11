@@ -1,5 +1,6 @@
 package com.studyolleh.modules.study;
 
+import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.modules.account.AccountFactory;
 import com.studyolleh.modules.account.WithAccount;
@@ -9,10 +10,7 @@ import com.studyolleh.modules.account.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -21,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-public class StudyControllerTest {
+public class StudyControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired StudyService studyService;
@@ -29,8 +27,6 @@ public class StudyControllerTest {
     @Autowired AccountRepository accountRepository;
     @Autowired AccountFactory accountFactory;
     @Autowired StudyFactory studyFactory;
-
-    protected static final String testName = "testname";
 
     @Test
     @WithAccount(testName)
