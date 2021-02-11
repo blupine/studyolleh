@@ -1,4 +1,4 @@
-package com.studyolleh.modules.event;
+package com.studyolleh.modules.study.event;
 
 import com.studyolleh.modules.study.Study;
 import lombok.Getter;

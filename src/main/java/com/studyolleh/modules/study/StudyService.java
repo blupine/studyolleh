@@ -1,7 +1,7 @@
 package com.studyolleh.modules.study;
 
 import com.studyolleh.modules.account.Account;
-import com.studyolleh.modules.event.StudyCreatedEvent;
+import com.studyolleh.modules.study.event.StudyCreatedEvent;
 import com.studyolleh.modules.tag.Tag;
 import com.studyolleh.modules.zone.Zone;
 import com.studyolleh.modules.study.form.StudyDescriptionForm;
@@ -25,7 +25,6 @@ public class StudyService {
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
         newStudy.addManager(account);
-        eventPublisher.publishEvent(new StudyCreatedEvent(newStudy));
         return newStudy;
     }
 
@@ -96,6 +95,7 @@ public class StudyService {
 
     public void publish(Study study) {
         study.publish();
+        eventPublisher.publishEvent(new StudyCreatedEvent(study));
     }
 
     public void close(Study study) {

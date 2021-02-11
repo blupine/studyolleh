@@ -1,10 +1,19 @@
+buildscript {
+	dependencies {
+		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.4.2'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id "com.github.node-gradle.node" version "2.2.3"
-
 }
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
+
 /**
  * npm install start
  */
@@ -21,7 +30,6 @@ task copyFrontLib(type: Copy) {
 
 copyFrontLib.dependsOn npmInstall
 compileJava.dependsOn copyFrontLib
-
 
 group = 'com.studyolleh'
 version = '0.0.1-SNAPSHOT'
@@ -48,16 +56,19 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-	runtimeOnly 'org.postgresql:postgresql'
+	implementation 'com.querydsl:querydsl-jpa'
+	implementation 'com.querydsl:querydsl-apt'
+
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.2'
-	implementation 'com.tngtech.archunit:archunit-junit5:0.13.1'
 	implementation 'org.modelmapper:modelmapper:2.3.6'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation "org.testcontainers:testcontainers:1.15.1"
 	testImplementation "org.testcontainers:junit-jupiter:1.15.1"
 	testImplementation "org.testcontainers:postgresql:1.15.1"
+	implementation 'com.tngtech.archunit:archunit-junit5:0.13.1'
 
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
@@ -68,3 +79,25 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+//querydsl 추가
+//def querydslDir = 'src/main/generated'
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', querydslDir]
+		} }
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+
