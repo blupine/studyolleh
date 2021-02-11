@@ -2,10 +2,12 @@
 - Add next to src/main/resources/application-dev.properties
     - Modify the database source and email account information to your own. 
 ```properties
-spring.datasource.url=jdbc:h2:tcp://localhost/~/study-olleh
-spring.datasource.username=sa
-spring.datasource.password=
-spring.datasource.driver-class-name=org.h2.Driver
+# 개발할 때에만 create-drop 또는 update를 사용하고 운영 환경에서는 validate를 사용합니다.
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:postgresql://localhost:5432/testdb
+spring.datasource.username=testuser
+spring.datasource.password=testpass
+
 
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
