@@ -30,9 +30,9 @@ public class NotificationInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (modelAndView != null && isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof UserAccount) {
+        if (modelAndView != null && !isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof UserAccount) {
             Account account = ((UserAccount) authentication.getPrincipal()).getAccount();
-            Long count = notificationRepository.countByAccountAndChecked(account, false);
+            long count = notificationRepository.countByAccountAndChecked(account, false);
             modelAndView.addObject("hasNotification", count > 0);
         }
     }
