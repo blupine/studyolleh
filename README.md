@@ -33,3 +33,9 @@ psql -h localhost -d postgres
 postgres=# CREATE USER testuser PASSWORD 'testpass' SUPERUSER;
 postgres=# CREATE DATABASE testdb OWNER testuser;
 ```
+
+-----------------------------------------------------
+
+### Project Overview
+
+![image](https://user-images.githubusercontent.com/30730212/107880768-46aa3e00-6f24-11eb-9852-7fd03f043d62.png)
