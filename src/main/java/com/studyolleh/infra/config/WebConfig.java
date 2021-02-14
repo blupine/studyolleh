@@ -22,6 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
         List<String> staticResourcePath = Arrays.stream(StaticResourceLocation.values())
                 .flatMap(StaticResourceLocation::getPatterns)
                 .collect(Collectors.toList());
+        staticResourcePath.add("/node_modules/**");
 
         registry.addInterceptor(notificationInterceptor)
                 .excludePathPatterns(staticResourcePath);

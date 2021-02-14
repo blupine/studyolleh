@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @Async
 @Component
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 public class StudyEventListener {
 
