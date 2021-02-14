@@ -2,7 +2,6 @@ package com.studyolleh.modules.study;
 
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
-import com.studyolleh.modules.account.QAccount;
 import com.studyolleh.modules.tag.QTag;
 import com.studyolleh.modules.zone.QZone;
 import org.springframework.data.domain.Page;
