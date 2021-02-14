@@ -13,8 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
 public class MainController {
@@ -26,6 +24,7 @@ public class MainController {
         if(account != null){
             model.addAttribute("account", account);
         }
+        model.addAttribute("studyList", studyService.getRecentStudyForIndexPage());
         return "index";
     }
 

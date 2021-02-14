@@ -183,4 +183,8 @@ public class StudyService {
     public Page<Study> searchByKeyword(String keyword, Pageable pageable) {
          return studyRepository.findByKeyword(keyword, pageable);
     }
+
+    public List<Study> getRecentStudyForIndexPage() {
+        return studyRepository.findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false);
+    }
 }
