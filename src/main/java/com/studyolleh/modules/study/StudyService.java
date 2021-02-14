@@ -10,6 +10,8 @@ import com.studyolleh.modules.study.form.StudyForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.access.AccessDeniedException;
@@ -178,7 +180,7 @@ public class StudyService {
         return study;
     }
 
-    public List<Study> searchByKeyword(String keyword) {
-         return studyRepository.findByKeyword(keyword);
+    public Page<Study> searchByKeyword(String keyword, Pageable pageable) {
+         return studyRepository.findByKeyword(keyword, pageable);
     }
 }
