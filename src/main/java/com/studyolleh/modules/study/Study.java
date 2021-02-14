@@ -60,16 +60,20 @@ public class Study {
 
     private boolean useBanner;
 
+    private int memberCount;
+
     public void addManager(Account account) {
         this.managers.add(account);
     }
 
     public void addMember(Account account) {
         this.members.add(account);
+        this.memberCount++;
     }
 
     public void removeMember(Account account) {
         this.members.remove(account);
+        this.memberCount--;
     }
 
     public boolean isJoinable(UserAccount userAccount) {
