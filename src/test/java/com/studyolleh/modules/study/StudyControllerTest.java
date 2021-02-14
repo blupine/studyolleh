@@ -129,7 +129,8 @@ public class StudyControllerTest extends AbstractContainerBaseTest {
         Study study = studyFactory.createStudy("test-study", account);
 
         mockMvc.perform(get("/study/" + study.getEncodedPath() + "/join"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isOk())
+                .andExpect(view().name("error"));
 
         Account account2 = accountRepository.findByNickname(testName);
         assertFalse(study.getMembers().contains(account2));
