@@ -1,10 +1,14 @@
 package com.studyolleh.modules.event;
 
 import com.studyolleh.modules.account.Account;
+import com.studyolleh.modules.event.event.EnrollmentAcceptEvent;
+import com.studyolleh.modules.event.event.EnrollmentRejectEvent;
 import com.studyolleh.modules.study.Study;
 import com.studyolleh.modules.event.form.EventForm;
+import com.studyolleh.modules.study.event.StudyUpdateEvent;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +23,13 @@ public class EventService {
     private final EventRepository eventRepository;
     private final EnrollmentRepository enrollmentRepository;
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Event createEvent(Event event, Study study, Account account) {
         event.setCreatedBy(account);
         event.setCreatedDateTime(LocalDateTime.now());
         event.setStudy(study);
+        eventPublisher.publishEvent(new StudyUpdateEvent(study, "'" + event.getTitle() + "' 모임을 만들었습니다."));
         return eventRepository.save(event);
     }
 
@@ -38,10 +44,12 @@ public class EventService {
     public void updateEvent(Event event, EventForm eventForm) {
         modelMapper.map(eventForm, event);
         event.acceptWaitingList();
+        eventPublisher.publishEvent(new StudyUpdateEvent(event.getStudy(), "'" + event.getTitle() + "' 모임 정보가 변경되었습니다."));
     }
 
     public void deleteEvent(Event event) {
         eventRepository.delete(event);
+        eventPublisher.publishEvent(new StudyUpdateEvent(event.getStudy(), "'" + event.getTitle() + "' 모임이 취소되었습니다."));
     }
 
     public void newEnrollment(Event event, Account account) {
@@ -66,10 +74,12 @@ public class EventService {
 
     public void acceptEnrollment(Event event, Enrollment enrollment) {
         event.accept(enrollment);
+        eventPublisher.publishEvent(new EnrollmentAcceptEvent(enrollment));
     }
 
     public void rejectEnrollment(Event event, Enrollment enrollment) {
         event.reject(enrollment);
+        eventPublisher.publishEvent(new EnrollmentRejectEvent(enrollment));
     }
 
     public void checkInEnrollment(Enrollment enrollment) {
