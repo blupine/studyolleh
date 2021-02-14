@@ -22,7 +22,7 @@ public class NotificationService {
 
     public void markAsRead(List<Notification> notifications) {
         notifications.forEach(n -> n.setChecked(true));
-        notificationRepository.saveAll(notifications);
+        notificationRepository.saveAll(notifications); // READ-ONLY로 Repository에서 읽어온거라서?
     }
 
     public void deleteCheckedNotification(Account account) {
