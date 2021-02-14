@@ -3,11 +3,16 @@ package com.studyolleh.modules.study;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import com.studyolleh.modules.tag.QTag;
+import com.studyolleh.modules.tag.Tag;
 import com.studyolleh.modules.zone.QZone;
+import com.studyolleh.modules.zone.Zone;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
+import java.util.List;
+import java.util.Set;
 
 public class StudyRepositoryExtensionImpl extends QuerydslRepositorySupport implements StudyRepositoryExtension{
 
@@ -31,5 +36,18 @@ public class StudyRepositoryExtensionImpl extends QuerydslRepositorySupport impl
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
     }
 
-
+    @Override
+    public List<Study> findByTagsAndZones(Set<Tag> tags, Set<Zone> zones) {
+        QStudy study = QStudy.study;
+        JPQLQuery<Study> query = from(study).where(study.published.isTrue()
+                .and(study.closed.isFalse())
+                .and(study.tags.any().in(tags))
+                .and(study.zones.any().in(zones)))
+                .leftJoin(study.tags, QTag.tag).fetchJoin()
+                .leftJoin(study.zones, QZone.zone).fetchJoin()
+                .orderBy(study.publishedDateTime.desc())
+                .distinct()
+                .limit(9);
+        return query.fetch();
+    }
 }

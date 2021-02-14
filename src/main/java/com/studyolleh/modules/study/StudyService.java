@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.access.AccessDeniedException;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -184,7 +185,20 @@ public class StudyService {
          return studyRepository.findByKeyword(keyword, pageable);
     }
 
-    public List<Study> getRecentStudyForIndexPage() {
+    public List<Study> getRecent9StudyForIndexPage() {
         return studyRepository.findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(true, false);
     }
+
+    public List<Study> getRecent5StudyContainingAsManager(Account account) {
+        return studyRepository.findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(account, false);
+    }
+
+    public List<Study> getRecent5StudyContainingAsMember(Account account) {
+        return studyRepository.findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(account, false);
+    }
+
+    public List<Study> getStudyContainingTagsAndZones(Set<Tag> tags, Set<Zone> zones) {
+        return studyRepository.findByTagsAndZones(tags, zones);
+    }
 }
+

@@ -185,4 +185,8 @@ public class AccountService implements UserDetailsService {
         }
         return account;
     }
+
+    public Account getAccountWithTagsAndZones(Account account) {
+        return accountRepository.findAccountWithZonesAndTagsById(account.getId());
+    }
 }
