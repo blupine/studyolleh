@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.access.AccessDeniedException;
 
+import java.util.List;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -174,5 +176,9 @@ public class StudyService {
         Study study = studyRepository.findStudyOnlyByPath(path);
         checkIfExistingStudy(path, study);
         return study;
+    }
+
+    public List<Study> searchByKeyword(String keyword) {
+         return studyRepository.findByKeyword(keyword);
     }
 }
