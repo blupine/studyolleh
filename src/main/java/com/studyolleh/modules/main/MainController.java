@@ -8,6 +8,7 @@ import com.studyolleh.modules.event.EnrollmentService;
 import com.studyolleh.modules.study.Study;
 import com.studyolleh.modules.study.StudyService;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -41,6 +42,7 @@ public class MainController {
             model.addAttribute("studyList", studyList);
             model.addAttribute("studyManagerOf", asManager);
             model.addAttribute("studyMemberOf", asMember);
+
             return "index-after-login";
         }
 
@@ -64,4 +66,7 @@ public class MainController {
                 pageable.getSort().toString().contains("publishedDateTime") ? "publishedDateTime" : "memberCount");
         return "search";
     }
+
+
+
 }

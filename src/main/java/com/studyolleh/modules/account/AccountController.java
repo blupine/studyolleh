@@ -44,6 +44,7 @@ public class AccountController {
 
     @GetMapping(SIGNUP_URL)
     public String signUpForm(Model model) {
+        System.out.println("asdf");
         model.addAttribute(new SignUpForm());
         return SIGNUP_VIEW_NAME;
     }
