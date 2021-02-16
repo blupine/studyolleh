@@ -13,9 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +28,7 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class AccountService implements UserDetailsService {
+public class AccountService {
 
     private final AccountRepository accountRepository;
     private final EmailService emailService;
@@ -82,18 +80,7 @@ public class AccountService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public UserDetails loadUserByUsername(String eamilOrNickname) throws UsernameNotFoundException {
-        Account account = accountRepository.findByEmail(eamilOrNickname);
-        if(account == null){
-            account = accountRepository.findByNickname(eamilOrNickname);
-        }
-        if(account == null){
-            return null;
-        }
-        return new UserAccount(account);
-    }
+
 
     public void completeSignUp(Account account) {
         account.completeSignUp();

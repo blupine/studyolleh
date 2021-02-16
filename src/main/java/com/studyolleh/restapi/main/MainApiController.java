@@ -7,9 +7,11 @@ import com.studyolleh.modules.event.Enrollment;
 import com.studyolleh.modules.event.EnrollmentService;
 import com.studyolleh.modules.study.Study;
 import com.studyolleh.modules.study.StudyService;
+import com.studyolleh.restapi.LoginService;
 import com.studyolleh.restapi.common.Response;
 import com.studyolleh.restapi.dto.AccountDto;
 import com.studyolleh.restapi.dto.EnrollmentDto;
+import com.studyolleh.restapi.dto.LoginRequestDto;
 import com.studyolleh.restapi.dto.StudyDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -32,6 +35,7 @@ public class MainApiController {
     private final StudyService studyService;
     private final EnrollmentService enrollmentService;
     private final ModelMapper modelMapper;
+    private final LoginService loginService;
 
     @GetMapping("/")
     public ResponseEntity home(@CurrentAccount Account account) {
@@ -47,7 +51,17 @@ public class MainApiController {
         }
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
-    
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto) {
+        Optional<AccountDto> optional = loginService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+
+        if (optional.isPresent()) {
+            String authToken = loginService.createAuthToken(optional.get());
+            return new ResponseEntity<>(new Response<>(authToken), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(new Response<>(null), HttpStatus.OK);
+    }
 
     private HomeDto convertDto(Account account, List<Enrollment> enrollmentList, List<Study> asManager,
                                List<Study> asMember, List<Study> studyList) {
