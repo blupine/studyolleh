@@ -1,4 +1,4 @@
-package com.studyolleh.restapi.dto;
+package com.studyolleh.restapi.account.dto;
 
 import lombok.Data;
 

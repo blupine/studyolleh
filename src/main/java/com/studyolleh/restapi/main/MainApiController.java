@@ -7,11 +7,10 @@ import com.studyolleh.modules.event.Enrollment;
 import com.studyolleh.modules.event.EnrollmentService;
 import com.studyolleh.modules.study.Study;
 import com.studyolleh.modules.study.StudyService;
-import com.studyolleh.restapi.LoginService;
-import com.studyolleh.restapi.common.Response;
-import com.studyolleh.restapi.dto.AccountDto;
+import com.studyolleh.restapi.account.LoginService;
+import com.studyolleh.restapi.account.dto.AccountDto;
 import com.studyolleh.restapi.dto.EnrollmentDto;
-import com.studyolleh.restapi.dto.LoginRequestDto;
+import com.studyolleh.restapi.account.dto.LoginRequestDto;
 import com.studyolleh.restapi.dto.StudyDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,9 +36,8 @@ public class MainApiController {
     private final ModelMapper modelMapper;
     private final LoginService loginService;
 
-    @GetMapping("/")
-    public ResponseEntity home(@CurrentAccount Account account) {
-
+    @GetMapping("/home")
+    public ResponseEntity home(@CurrentAccount Account account){
         if (account != null) {
             Account loadedAccount = accountService.getAccountWithTagsAndZones(account);
             List<Enrollment> enrollmentList = enrollmentService.getEnrollmentByAccountWithEventAndStudy(account);
@@ -58,9 +56,9 @@ public class MainApiController {
 
         if (optional.isPresent()) {
             String authToken = loginService.createAuthToken(optional.get());
-            return new ResponseEntity<>(new Response<>(authToken), HttpStatus.OK);
+            return new ResponseEntity<>(authToken, HttpStatus.OK);
         }
-        return new ResponseEntity<>(new Response<>(null), HttpStatus.OK);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     private HomeDto convertDto(Account account, List<Enrollment> enrollmentList, List<Study> asManager,

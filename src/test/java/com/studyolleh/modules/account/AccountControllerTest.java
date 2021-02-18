@@ -37,7 +37,7 @@ class AccountControllerTest extends AbstractContainerBaseTest {
     @Autowired MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;
     @MockBean EmailService emailService;
-//
+
 //    @Container
 //    static GenericContainer postgreSQLContainer = new GenericContainer("postgres")
 //            .withExposedPorts(5432)

@@ -1,21 +1,17 @@
-package com.studyolleh.restapi;
+package com.studyolleh.restapi.account;
 
 import com.studyolleh.infra.config.JwtTokenProvider;
 import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.account.UserAccount;
-import com.studyolleh.restapi.dto.AccountDto;
+import com.studyolleh.restapi.account.dto.AccountDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Optional;
 
 @Service
