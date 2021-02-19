@@ -17,17 +17,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.MediaTypes;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/")
+@RequestMapping(value = "/api/", produces = MediaTypes.HAL_JSON_VALUE)
 public class MainApiController {
 
     private final AccountService accountService;
@@ -45,7 +49,14 @@ public class MainApiController {
             List<Study> asMember = studyService.getRecent5StudyContainingAsMember(account);
             List<Study> studyList = studyService.getStudyContainingTagsAndZones(loadedAccount.getTags(), loadedAccount.getZones());
             HomeDto homeDto = convertDto(loadedAccount, enrollmentList, asManager, asMember, studyList);
-            return new ResponseEntity<>(homeDto, HttpStatus.OK);
+
+            WebMvcLinkBuilder builder = WebMvcLinkBuilder.linkTo(MainApiController.class);
+            URI uri = builder.toUri();
+
+            EntityModel<HomeDto> entityModel = EntityModel.of(homeDto);
+            entityModel.add(WebMvcLinkBuilder.linkTo(MainApiController.class).withSelfRel());
+            entityModel.add(WebMvcLinkBuilder.linkTo(MainApiController.class).slash(account.getNickname()).withRel("detail"));
+            return ResponseEntity.created(uri).body(entityModel);
         }
         return new ResponseEntity<>(null, HttpStatus.OK);
     }

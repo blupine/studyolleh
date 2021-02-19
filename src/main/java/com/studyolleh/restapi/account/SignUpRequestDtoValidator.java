@@ -6,6 +6,6 @@ import org.springframework.validation.Validator;
 
 @Component
 @RequiredArgsConstructor
-public class SignUpRequestDtoValidator implements Validator {
+public class SignUpRequestDtoValidator{
 
 }
