@@ -14,29 +14,30 @@
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
+
+    <link rel="stylesheet" href="/node_modules/bootstrap-select/dist/css/bootstrap-select.min.css">
+    <script src="/node_modules/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+
     <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
         .container {
+            position: relative;
+            min-height: 90%;
             max-width: 100%;
+            padding-bottom: 50px;
         }
 
-        .tagify-outside{
-            border: 0;
-            padding: 0;
-            margin: 0;
-        }
-
-        #study-logo {
-            height: 200px;
-            width: 100%;
-            overflow: hidden;
-            padding: 0;
-            margin: 0;
-        }
-
-        #study-logo img {
-            height: auto;
-            width: 100%;
-            overflow: hidden;
+        footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding-bottom: 10px;
         }
 
         body {
@@ -54,12 +55,28 @@
             font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
         }
 
-        table th {
-            font-weight: lighter;
+        button:focus, input[type=button]:focus {
+            outline: none;
+        }
+
+        .tagify-outside {
+            border: 0;
+            padding: 0;
+            margin: 0;
+        }
+
+        label {
+            margin-left: 5px;
+            font-weight: 600;
+        }
+
+        small {
+            padding-left: 5px;
         }
 
         mark {
             padding: 0;
+            border-radius: 10px;
             background: transparent;
             background: linear-gradient(to right, #f0ad4e 50%, transparent 50%);
             background-position: right bottom;
@@ -75,14 +92,15 @@
 
         .jumbotron {
             padding-top: 3rem;
-            padding-bottom: 3rem;
+            padding-bottom: 2rem;
             margin-bottom: 0;
             background-color: #fff;
         }
+
         @media (min-width: 768px) {
             .jumbotron {
                 padding-top: 6rem;
-                padding-bottom: 6rem;
+                padding-bottom: 5rem;
             }
         }
 
@@ -95,7 +113,71 @@
         }
 
         .jumbotron .container {
-            max-width: 40rem;
+            max-width: 60rem;
+        }
+
+        .search-wrapper {
+            max-width: 580px;
+            width: 100%;
+            position: relative;
+        }
+
+        .search-wrapper .form-control {
+            width: 550px;
+            background-color: rgba(29,192,120,.12);
+            border: 1px solid rgba(29,192,120,.24);
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,.1);
+            padding: 14px 20px;
+            border-radius: 28px;
+            height: auto;
+            transition: all .2s ease;
+        }
+
+        .search-wrapper .search-btn {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            background-color: inherit;
+            border: unset;
+            outline: none;
+        }
+
+        .search-wrapper .form-control:focus {
+            outline: unset;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,.2);
+            border: 1px solid #dedede;
+            background-color: #fff;
+        }
+
+        .mm-menu {
+            --mm-offset-top: 100px;
+        }
+
+        .mm-menu .content-title {
+            font-weight: bolder;
+        }
+
+        .mm-menu .content-list {
+            background-color: #D8D8D8;
+            pointer-events: none;
+        }
+
+        .mm-menu .content-list-link {
+            background-color: #D8D8D8;
+        }
+
+        #home-nav {
+            background-color: #E6E6E6;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,.2);
+        }
+
+        .swiper-container {
+            width: 100%;
+            height: auto;
+            margin-top: 20px;
+            margin-bottom: 30px;
         }
     </style>
 </head>
@@ -618,16 +700,32 @@
     </div>
 </div>
 
+
 <ul th:fragment="notification-list (notifications)" class="list-group list-group-flush">
-    <a href="#" th:href="@{${noti.link}}" th:each="noti: ${notifications}"
-       class="list-group-item list-group-item-action">
+    <li th:each="notification : ${notifications}" class="list-group-item list-group-item-action">
         <div class="d-flex w-100 justify-content-between">
-d            <small class="text-muted" th:text="${noti.title}">Noti title</small>
-            <small class="fromNow text-muted" th:text="${noti.createdLocalDateTime}">3 days ago</small>
+            <div>
+                <span th:if="${#strings.isEmpty(notification.link)}">
+                    <small class="text-muted"><i class="fa fa-unlink"></i></small>
+                    <small th:text="${notification.title}" class="text-muted">notification title</small>
+                </span>
+
+                <span th:if="${!#strings.isEmpty(notification.link)}">
+                    <small><i class="fa fa-link"></i></small>
+                    <a th:href="@{${notification.link}}">
+                        <small th:text="${notification.title}">notification title</small>
+                    </a>
+                </span>
+            </div>
+
+            <small class="fromNow text-muted" th:text="${notification.createdLocalDateTime}">notification created datetime</small>
         </div>
-        <p th:text="${noti.message}" class="text-left mb-0 mt-1">message</p>
-    </a>
+
+        <p th:text="${notification.message}" class="text-left mb-0 mt-1">message</p>
+    </li>
 </ul>
+
+
 <div th:fragment="study-list (studyList)" class="col-sm-12">
     <div class="row">
         <div class="col-md-4" th:each="study: ${studyList}">
