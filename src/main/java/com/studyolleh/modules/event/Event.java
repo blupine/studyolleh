@@ -78,7 +78,6 @@ public class Event {
         }
         return false;
     }
-
     private boolean isNotClosed() {
         return this.endEnrollmentDateTime.isAfter(LocalDateTime.now());
     }
@@ -173,4 +172,11 @@ public class Event {
             enrollment.setAccepted(false);
         }
     }
+
+    public boolean isStarted() {
+        return LocalDateTime.now().isAfter(this.startDateTime);
+    }
+
+
+
 }

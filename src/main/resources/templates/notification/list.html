@@ -23,17 +23,17 @@
                 <a href="#" th:if="${newStudyNotifications.size() > 0}"
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     새 스터디 알림
-                    <span th:text="${newStudyNotifications.size()}">3</span>
+                    <span class="badge badge-primary badge-pill"  th:text="${newStudyNotifications.size()}">3</span>
                 </a>
                 <a href="#" th:if="${eventEnrollmentNotifications.size() > 0}"
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     모임 참가 신청 알림
-                    <span th:text="${eventEnrollmentNotifications.size()}">0</span>
+                    <span class="badge badge-primary badge-pill" th:text="${eventEnrollmentNotifications.size()}">0</span>
                 </a>
                 <a href="#" th:if="${watchingStudyNotifications.size() > 0}"
                    class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
                     관심있는 스터디 알림
-                    <span th:text="${watchingStudyNotifications.size()}">0</span>
+                    <span class="badge badge-primary badge-pill" th:text="${watchingStudyNotifications.size()}">0</span>
                 </a>
             </ul>
 
@@ -42,7 +42,10 @@
                     <button type="submit" class="btn btn-block btn-outline-warning" aria-describedby="deleteHelp">
                         읽은 알림 삭제
                     </button>
-                    <small id="deleteHelp">삭제하지 않아도 한달이 지난 알림은 사라집니다.</small>
+                    <small id="deleteHelp" class="text-left text-muted">
+                        <i class="fa fa-exclamation-circle"></i>
+                        삭제하지 않아도 한달이 지난 알림은 사라집니다.
+                    </small>
                 </form>
             </ul>
         </div>
@@ -54,21 +57,21 @@
             </div>
 
             <div class="card" th:if="${newStudyNotifications.size() > 0}">
-                <div class="card-header">
+                <div class="card-header font-weight-bolder">
                     주요 활동 지역에 관심있는 주제의 스터디가 생겼습니다.
                 </div>
                 <div th:replace="fragments.html :: notification-list (notifications=${newStudyNotifications})"></div>
             </div>
 
             <div class="card mt-4" th:if="${eventEnrollmentNotifications.size() > 0}">
-                <div class="card-header">
+                <div class="card-header font-weight-bolder">
                     모임 참가 신청 관련 소식이 있습니다.
                 </div>
                 <div th:replace="fragments.html :: notification-list (notifications=${eventEnrollmentNotifications})"></div>
             </div>
 
             <div class="card mt-4" th:if="${watchingStudyNotifications.size() > 0}">
-                <div class="card-header">
+                <div class="card-header font-weight-bolder">
                     참여중인 스터디 관련 소식이 있습니다.
                 </div>
                 <div th:replace="fragments.html :: notification-list (notifications=${watchingStudyNotifications})"></div>
