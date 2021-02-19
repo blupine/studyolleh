@@ -78,7 +78,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // logo가 로딩 안되는 현상 해결 : StaticResource에 대한 시큐리티 필터 적용 안함 설정
         web.ignoring()
                 .mvcMatchers("/node_modules/**")
-                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
+                .antMatchers("/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**",
+                "/swagger-ui/**");
     }
 
     @Override

@@ -61,6 +61,12 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa'
 	implementation 'com.querydsl:querydsl-apt'
 
+
+	compile 'org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE'
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.4.0'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.4.0'
+
+
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.2'
 	implementation 'org.modelmapper:modelmapper:2.3.6'
 	compileOnly 'org.projectlombok:lombok'

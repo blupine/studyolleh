@@ -61,16 +61,6 @@ public class MainApiController {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto) {
-        Optional<AccountDto> optional = loginService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-
-        if (optional.isPresent()) {
-            String authToken = loginService.createAuthToken(optional.get());
-            return new ResponseEntity<>(authToken, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
 
     private HomeDto convertDto(Account account, List<Enrollment> enrollmentList, List<Study> asManager,
                                List<Study> asMember, List<Study> studyList) {
