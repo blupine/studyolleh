@@ -6,6 +6,8 @@ import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.account.AccountFactory;
 import com.studyolleh.modules.account.AccountRepository;
 import com.studyolleh.modules.account.WithAccount;
+import com.studyolleh.modules.event.repository.EnrollmentRepository;
+import com.studyolleh.modules.event.repository.EventRepository;
 import com.studyolleh.modules.study.Study;
 import com.studyolleh.modules.study.StudyFactory;
 import org.junit.jupiter.api.DisplayName;

@@ -3,6 +3,8 @@ package com.studyolleh.modules.event;
 import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.event.event.EnrollmentAcceptEvent;
 import com.studyolleh.modules.event.event.EnrollmentRejectEvent;
+import com.studyolleh.modules.event.repository.EnrollmentRepository;
+import com.studyolleh.modules.event.repository.EventRepository;
 import com.studyolleh.modules.study.Study;
 import com.studyolleh.modules.event.form.EventForm;
 import com.studyolleh.modules.study.event.StudyUpdateEvent;
@@ -88,5 +90,9 @@ public class EventService {
 
     public void cancelCheckInEnrollment(Enrollment enrollment) {
         enrollment.setAttended(false);
+    }
+
+    public List<Enrollment> getEnrollmentsByEvent(Long eventId) {
+        return enrollmentRepository.findAllByEvent(eventId);
     }
 }

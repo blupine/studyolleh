@@ -1,6 +1,7 @@
 package com.studyolleh.modules.event;
 
 import com.studyolleh.modules.account.Account;
+import com.studyolleh.modules.event.repository.EnrollmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

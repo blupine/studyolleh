@@ -62,9 +62,13 @@ public class EventController {
     @GetMapping("/events/{id}")
     public String getEvent(@CurrentAccount Account account, @PathVariable String path, @PathVariable("id") Event event,
                            Model model) {
+
+        List<Enrollment> findEnrollments = eventService.getEnrollmentsByEvent(event.getId());
         model.addAttribute(account);
         model.addAttribute(studyService.findStudyWithManagersByPath(path));
+        model.addAttribute("enrollments", findEnrollments);
         model.addAttribute(event);
+
         return "/event/view";
     }
 
