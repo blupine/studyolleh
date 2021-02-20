@@ -7,10 +7,8 @@ import com.studyolleh.modules.event.Enrollment;
 import com.studyolleh.modules.event.EnrollmentService;
 import com.studyolleh.modules.study.Study;
 import com.studyolleh.modules.study.StudyService;
-import com.studyolleh.restapi.account.LoginService;
-import com.studyolleh.restapi.account.dto.AccountDto;
+import com.studyolleh.restapi.account.RestAccountService;
 import com.studyolleh.restapi.dto.EnrollmentDto;
-import com.studyolleh.restapi.account.dto.LoginRequestDto;
 import com.studyolleh.restapi.dto.StudyDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,7 +35,7 @@ public class MainApiController {
     private final StudyService studyService;
     private final EnrollmentService enrollmentService;
     private final ModelMapper modelMapper;
-    private final LoginService loginService;
+    private final RestAccountService loginService;
 
     @GetMapping("/home")
     public ResponseEntity home(@CurrentAccount Account account){

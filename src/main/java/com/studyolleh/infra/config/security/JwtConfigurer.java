@@ -1,4 +1,4 @@
-package com.studyolleh.infra.config;
+package com.studyolleh.infra.config.security;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

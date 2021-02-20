@@ -1,6 +1,6 @@
 package com.studyolleh.restapi.account;
 
-import com.studyolleh.infra.config.JwtTokenProvider;
+import com.studyolleh.infra.config.security.JwtTokenProvider;
 import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.account.UserAccount;
 import com.studyolleh.restapi.account.dto.AccountDto;
@@ -16,17 +16,13 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class LoginService {
+public class RestAccountService {
 
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final static long LOGIN_RETENTION_MINUTES = 30;
     private final ModelMapper modelMapper;
-    /**
-     * @param username : nickname or email
-     * @param password
-     * @return
-     */
+
     public Optional<AccountDto> login(String username, String password) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
@@ -42,6 +38,8 @@ public class LoginService {
 
         return Optional.ofNullable(accountDto);
     }
+
+
 
     public String createAuthToken(AccountDto accountDto) {
         return jwtTokenProvider.createToken(accountDto.getNickname());

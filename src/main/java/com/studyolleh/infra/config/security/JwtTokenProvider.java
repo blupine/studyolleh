@@ -1,4 +1,4 @@
-package com.studyolleh.infra.config;
+package com.studyolleh.infra.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

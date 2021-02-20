@@ -8,6 +8,7 @@ import com.studyolleh.infra.mail.EmailMessage;
 import com.studyolleh.infra.mail.EmailService;
 import com.studyolleh.modules.account.form.Notifications;
 import com.studyolleh.modules.account.form.Profile;
+import com.studyolleh.restapi.account.dto.SignUpRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,6 +37,11 @@ public class AccountService {
     private final ModelMapper modelMapper;
     private final AppProperties appProperties;
     private final TemplateEngine templateEngine;
+
+    public Account processNewAccountWithDto(SignUpRequestDto signUpRequestDto) {
+        SignUpForm signUpForm = modelMapper.map(signUpRequestDto, SignUpForm.class);
+        return processNewAccount(signUpForm);
+    }
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm);

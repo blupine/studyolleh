@@ -23,8 +23,6 @@ public class AccountDto {
 
     private boolean emailVerified;
 
-    private String emailCheckToken;
-
     private LocalDateTime emailCheckTokenGeneratedAt;
 
     private LocalDateTime joinedAt;

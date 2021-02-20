@@ -1,4 +1,4 @@
-package com.studyolleh.infra.config;
+package com.studyolleh.infra.config.security;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
