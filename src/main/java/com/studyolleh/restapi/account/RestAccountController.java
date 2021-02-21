@@ -4,12 +4,15 @@ import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.account.AccountService;
 import com.studyolleh.modules.account.CurrentAccount;
 import com.studyolleh.restapi.account.dto.*;
+import com.studyolleh.restapi.account.validator.SignUpRequestDtoValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -21,6 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RestAccountController {
 
+    private final SignUpRequestDtoValidator signUpRequestDtoValidator;
     private final AccountService accountService;
     private final RestAccountService loginService;
     private final ModelMapper modelMapper;
@@ -28,7 +32,7 @@ public class RestAccountController {
     private URI uri = webMvcLinkBuilder.toUri();
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity login(@RequestBody @Valid LoginRequestDto loginRequestDto, Errors errors) {
         Optional<AccountDto> optional = loginService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
 
         EntityModel<LoginResultDto> entityModel;
@@ -47,13 +51,19 @@ public class RestAccountController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity signup(@RequestBody SignUpRequestDto signUpRequestDto) {
+    public ResponseEntity signup(@RequestBody @Valid SignUpRequestDto signUpRequestDto, Errors errors) {
+
+        signUpRequestDtoValidator.validate(signUpRequestDto, errors);
+        if (errors.hasErrors()) {
+            return ResponseEntity.badRequest().body(errors);
+        }
         Account account = accountService.processNewAccountWithDto(signUpRequestDto);
 
         SignUpResultDto signUpResultDto = modelMapper.map(account, SignUpResultDto.class);
         EntityModel<SignUpResultDto> entityModel = EntityModel.of(signUpResultDto);
         entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("signup").withSelfRel());
         entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("login").withRel("login"));
+        entityModel.add(new Link("/docs/index.html#resources-user-signup").withRel("docs"));
         return ResponseEntity.created(uri).body(entityModel);
     }
 

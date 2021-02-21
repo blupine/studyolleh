@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ExceptionAdvice {
 
     @ExceptionHandler
-    public String handleRuntimeException(@CurrentAccount Account account, HttpServletRequest req, RuntimeException e) {
+    public String handleRuntimeException(@CurrentAccount Account account,
+                                         HttpServletRequest req, RuntimeException e) {
         if (account != null) {
             log.info("'{}' requested '{}'", account.getNickname(), req.getRequestURI());
         } else {

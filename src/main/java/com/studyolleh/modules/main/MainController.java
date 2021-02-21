@@ -55,9 +55,9 @@ public class MainController {
     }
 
     @GetMapping("/search/study")
-    public String searchStudy(String keyword, Model model, @PageableDefault(
-                                      size = 9,
-                                      sort = "publishedDateTime",
+    public String searchStudy(String keyword, Model model,
+                              @PageableDefault(
+                                      size = 9, sort = "publishedDateTime",
                                       direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Study> studyPage = studyService.searchByKeyword(keyword, pageable);
         model.addAttribute("studyPage", studyPage);

@@ -75,13 +75,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring()
                 .mvcMatchers("/node_modules/**")
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
-                .antMatchers("/v2/api-docs",
-                "/configuration/ui",
-                "/swagger-resources/**",
+                .antMatchers("/configuration/ui",
                 "/configuration/security",
-                "/swagger-ui.html",
                 "/webjars/**",
-                "/swagger-ui/**");
+                "/docs/**");
     }
 
     @Override

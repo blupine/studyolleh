@@ -1,6 +1,7 @@
 buildscript {
 	dependencies {
 		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+		classpath 'org.asciidoctor:asciidoctor-gradle-plugin:1.5.9.2'
 	}
 }
 
@@ -9,10 +10,31 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
 	id "com.github.node-gradle.node" version "2.2.3"
+	id "org.asciidoctor.convert" version "1.5.3"
 }
 
 apply plugin: 'io.spring.dependency-management'
 apply plugin: "com.ewerk.gradle.plugins.querydsl"
+
+asciidoctor {
+	doLast {
+		copy {
+			from file("build/asciidoc/html5")
+			//src/docs/asciidoc 경로의 index.adoc 파일을 읽어서 생성된 index.html 파일 경로
+			into file("src/main/resources/static/docs")
+			//src/main/resources/static/docs에 위 index.html 파일을 복사한다.
+		}
+	}
+	sourceDir = file('src/docs/asciidoc') // default path
+	sources {
+		include 'index.adoc'
+	}
+	//위의 경로에 있는 index.adoc을 읽는다.
+	options doctype: 'book', backend: 'html'
+}
+build {
+	dependsOn asciidoctor
+}
 
 /**
  * npm install start
@@ -43,6 +65,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 dependencies {
@@ -51,6 +74,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
@@ -61,11 +85,7 @@ dependencies {
 	implementation 'com.querydsl:querydsl-jpa'
 	implementation 'com.querydsl:querydsl-apt'
 
-
-	compile 'org.springframework.plugin:spring-plugin-core:1.2.0.RELEASE'
-	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.4.0'
-	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.4.0'
-
+	compile 'org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE'
 
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.2'
 	implementation 'org.modelmapper:modelmapper:2.3.6'
@@ -82,6 +102,9 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.3.RELEASE'
+	testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:2.0.3.RELEASE'
 }
 
 test {
@@ -108,4 +131,3 @@ compileQuerydsl{
 configurations {
 	querydsl.extendsFrom compileClasspath
 }
-
