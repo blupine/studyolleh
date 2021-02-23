@@ -2,8 +2,8 @@ package com.studyolleh.modules.main;
 
 import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
-import com.studyolleh.modules.account.AccountRepository;
-import com.studyolleh.modules.account.AccountService;
+import com.studyolleh.modules.account.repository.AccountRepository;
+import com.studyolleh.modules.account.service.AccountService;
 import com.studyolleh.modules.account.form.SignUpForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

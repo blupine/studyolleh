@@ -1,13 +1,10 @@
 package com.studyolleh.modules.event.repository;
 
-
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.studyolleh.modules.event.Enrollment;
-import com.studyolleh.modules.event.QEnrollment;
+import com.studyolleh.modules.event.domain.Enrollment;
+import com.studyolleh.modules.event.domain.QEnrollment;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 public class EnrollmentRepositoryImpl extends QuerydslRepositorySupport implements EnrollmentRepositoryCustom{

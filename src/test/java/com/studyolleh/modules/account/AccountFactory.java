@@ -1,13 +1,15 @@
 package com.studyolleh.modules.account;
 
-import lombok.RequiredArgsConstructor;
+import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccountFactory {
 
-    @Autowired AccountRepository accountRepository;
+    @Autowired
+    AccountRepository accountRepository;
 
     public Account createAccount(String name) {
         Account account = new Account();

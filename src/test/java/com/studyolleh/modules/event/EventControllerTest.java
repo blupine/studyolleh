@@ -2,13 +2,17 @@ package com.studyolleh.modules.event;
 
 import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
-import com.studyolleh.modules.account.Account;
+import com.studyolleh.modules.account.domain.Account;
 import com.studyolleh.modules.account.AccountFactory;
-import com.studyolleh.modules.account.AccountRepository;
+import com.studyolleh.modules.account.repository.AccountRepository;
 import com.studyolleh.modules.account.WithAccount;
+import com.studyolleh.modules.event.domain.Enrollment;
+import com.studyolleh.modules.event.domain.Event;
+import com.studyolleh.modules.event.domain.EventType;
 import com.studyolleh.modules.event.repository.EnrollmentRepository;
 import com.studyolleh.modules.event.repository.EventRepository;
-import com.studyolleh.modules.study.Study;
+import com.studyolleh.modules.event.service.EventService;
+import com.studyolleh.modules.study.domain.Study;
 import com.studyolleh.modules.study.StudyFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,7 +32,8 @@ class EventControllerTest extends AbstractContainerBaseTest {
     @Autowired MockMvc mockMvc;
     @Autowired AccountFactory accountFactory;
     @Autowired StudyFactory studyFactory;
-    @Autowired EventService eventService;
+    @Autowired
+    EventService eventService;
     @Autowired EventRepository eventRepository;
     @Autowired EnrollmentRepository enrollmentRepository;
     @Autowired AccountRepository accountRepository;

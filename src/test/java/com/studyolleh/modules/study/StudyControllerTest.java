@@ -4,9 +4,12 @@ import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.modules.account.AccountFactory;
 import com.studyolleh.modules.account.WithAccount;
-import com.studyolleh.modules.account.AccountRepository;
-import com.studyolleh.modules.account.Account;
+import com.studyolleh.modules.account.repository.AccountRepository;
+import com.studyolleh.modules.account.domain.Account;
 
+import com.studyolleh.modules.study.domain.Study;
+import com.studyolleh.modules.study.repository.StudyRepository;
+import com.studyolleh.modules.study.service.StudyService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class StudyControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired StudyService studyService;
-    @Autowired StudyRepository studyRepository;
+    @Autowired
+    StudyService studyService;
+    @Autowired
+    StudyRepository studyRepository;
     @Autowired AccountRepository accountRepository;
     @Autowired AccountFactory accountFactory;
     @Autowired StudyFactory studyFactory;

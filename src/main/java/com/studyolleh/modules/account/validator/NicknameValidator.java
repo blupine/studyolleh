@@ -1,6 +1,6 @@
 package com.studyolleh.modules.account.validator;
 
-import com.studyolleh.modules.account.AccountRepository;
+import com.studyolleh.modules.account.repository.AccountRepository;
 import com.studyolleh.modules.account.form.NicknameForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

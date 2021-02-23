@@ -1,8 +1,8 @@
 package com.studyolleh.modules.study;
 
-import com.studyolleh.modules.account.Account;
-import com.studyolleh.modules.account.UserAccount;
-import com.studyolleh.modules.study.Study;
+import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.authentication.UserAccount;
+import com.studyolleh.modules.study.domain.Study;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

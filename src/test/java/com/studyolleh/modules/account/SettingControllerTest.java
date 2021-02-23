@@ -3,25 +3,26 @@ package com.studyolleh.modules.account;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
-import com.studyolleh.modules.tag.Tag;
-import com.studyolleh.modules.zone.Zone;
-import com.studyolleh.modules.tag.TagForm;
-import com.studyolleh.modules.zone.ZoneForm;
-import com.studyolleh.modules.tag.TagRepository;
-import com.studyolleh.modules.zone.ZoneRepository;
+import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.repository.AccountRepository;
+import com.studyolleh.modules.account.service.AccountService;
+import com.studyolleh.modules.tag.domain.Tag;
+import com.studyolleh.modules.zone.domain.Zone;
+import com.studyolleh.modules.tag.form.TagForm;
+import com.studyolleh.modules.zone.form.ZoneForm;
+import com.studyolleh.modules.tag.repository.TagRepository;
+import com.studyolleh.modules.zone.repository.ZoneRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.studyolleh.modules.account.SettingController.*;
+import static com.studyolleh.modules.account.controller.SettingController.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -31,11 +32,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SettingControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired AccountRepository accountRepository;
+    @Autowired
+    AccountRepository accountRepository;
     @Autowired PasswordEncoder passwordEncoder;
     @Autowired ObjectMapper objectMapper;
     @Autowired TagRepository tagRepository;
-    @Autowired AccountService accountService;
+    @Autowired
+    AccountService accountService;
     @Autowired ZoneRepository zoneRepository;
 
     private Zone testZone = Zone.builder().city("city").localNameOfCity("localName").province("province").build();
@@ -79,7 +82,7 @@ class SettingControllerTest extends AbstractContainerBaseTest {
 
         Account account = accountRepository.findByNickname(testName);
         Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince());
-        assertTrue(account.getZones().contains(zone));
+        assertTrue(accountService.getZones(account).contains(zone));
     }
 
     @Transactional
@@ -149,7 +152,7 @@ class SettingControllerTest extends AbstractContainerBaseTest {
         Tag newTag = tagRepository.findByTitle("newTag");
         assertNotNull(newTag);
         Account account = accountRepository.findByNickname(testName);
-        assertTrue(account.getTags().contains(newTag));
+        assertTrue(accountService.getTags(account).contains(newTag));
     }
 
     @Transactional
@@ -161,7 +164,7 @@ class SettingControllerTest extends AbstractContainerBaseTest {
         Tag newTag = tagRepository.save(Tag.builder().title("newTag").build());
         accountService.addTag(account, newTag);
 
-        assertTrue(account.getTags().contains(newTag));
+        assertTrue(accountService.getTags(account).contains(newTag));
 
         TagForm tagForm = new TagForm();
         tagForm.setTagTitle("newTag");

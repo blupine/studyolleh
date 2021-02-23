@@ -4,19 +4,15 @@ import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.infra.mail.EmailMessage;
 import com.studyolleh.infra.mail.EmailService;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import com.studyolleh.modules.account.controller.AccountController;
+import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import org.springframework.test.web.servlet.MockMvc;
-import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.output.Slf4jLogConsumer;
-import org.testcontainers.junit.jupiter.Container;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
@@ -35,7 +31,8 @@ class AccountControllerTest extends AbstractContainerBaseTest {
     private static final String testPassword = "12341234";
 
     @Autowired MockMvc mockMvc;
-    @Autowired AccountRepository accountRepository;
+    @Autowired
+    AccountRepository accountRepository;
     @MockBean EmailService emailService;
 //
 //    @Container
