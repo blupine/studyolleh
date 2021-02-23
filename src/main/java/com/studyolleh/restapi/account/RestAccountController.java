@@ -46,6 +46,7 @@ public class RestAccountController {
             entityModel.add(Link.of("/docs/index.html#user-login-success").withRel("profile"));
             return ResponseEntity.accepted().body(entityModel);
         } else {
+            // TODO : Should handle some other exception cases.
             throw new BadCredentialsException("Unknown error");
         }
     }

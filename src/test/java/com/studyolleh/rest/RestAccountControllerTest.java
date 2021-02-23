@@ -79,7 +79,8 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
                 .andDo(document("user-login-success",
                         links(
                                 linkWithRel("self").description("link to self"),
-                                linkWithRel("user-profile").description("link to login user's profile")
+                                linkWithRel("user-profile").description("link to login user's profile"),
+                                linkWithRel("profile").description("link to api docs")
                         ),
                         requestFields(
                                 fieldWithPath("username").description("Email or Nickname to login"),
