@@ -51,9 +51,9 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
     @Autowired AccountRepository accountRepository;
     @Autowired AccountService accountService;
 
-    @DisplayName("로그인 요청")
+    @DisplayName("로그인 요청 - 성공")
     @Test
-    void loginTest() throws Exception{
+    void loginSuccess() throws Exception{
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .nickname("blupine")
                 .email("test@email.com")
@@ -70,10 +70,74 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
                 .content(objectMapper.writeValueAsString(loginRequestDto)))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(status().isCreated())
+                .andExpect(status().isAccepted())
                 .andExpect(jsonPath("authToken").hasJsonPath())
-                .andExpect(header().string(HttpHeaders.CONTENT_TYPE, MediaTypes.HAL_JSON_VALUE));
+                .andExpect(jsonPath("_links").hasJsonPath())
+                .andExpect(jsonPath("_links.self").hasJsonPath())
+                .andExpect(jsonPath("_links.user-profile").hasJsonPath())
+                .andExpect(jsonPath("_links.profile").hasJsonPath())
+                .andDo(document("user-login-success",
+                        links(
+                                linkWithRel("self").description("link to self"),
+                                linkWithRel("user-profile").description("link to login user's profile")
+                        ),
+                        requestFields(
+                                fieldWithPath("username").description("Email or Nickname to login"),
+                                fieldWithPath("password").description("Password")
+                        ),
+                        responseFields(
+                                fieldWithPath("authToken").description("JWT Token can be used to authenticate user to server."),
+                                fieldWithPath("_links.self.href").description("self link"),
+                                fieldWithPath("_links.user-profile.href").description("user's profile link"),
+                                fieldWithPath("_links.profile.href").description("api docs link")
+                        )
+                ));
+    }
+
+    @DisplayName("로그인 요청 - 실패 (bad credential)")
+    @Test
+    void loginFail() throws Exception{
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+                .nickname("blupine")
+                .email("test@email.com")
+                .password("asdfasdf")
+                .build();
+        accountService.processNewAccountWithDto(signUpRequestDto);
+
+        LoginRequestDto loginRequestDto = LoginRequestDto.builder()
+                .username("blupine")
+                .password("asdfasdf+fail")
+                .build();
+
+        mockMvc.perform(post("/api/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON)
+                .content(objectMapper.writeValueAsString(loginRequestDto)))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("httpStatus").hasJsonPath())
+                .andExpect(jsonPath("message").hasJsonPath())
+                .andExpect(jsonPath("_links").hasJsonPath())
+                .andExpect(jsonPath("_links.self").hasJsonPath())
+                .andExpect(jsonPath("_links.signup").hasJsonPath())
+                .andExpect(jsonPath("_links.profile").hasJsonPath())
+                .andDo(document("user-login-fail",
+                        links(
+                                linkWithRel("self").description("link to self"),
+                                linkWithRel("signup").description("link to signup"),
+                                linkWithRel("profile").description("link to api docs")
+                        ),
+                        requestFields(
+                                fieldWithPath("username").description("Email or Nickname to login"),
+                                fieldWithPath("password").description("Password")
+                        ),
+                        responseFields(
+                                fieldWithPath("httpStatus").description("HTTP Status code"),
+                                fieldWithPath("message").description("Error message"),
+                                fieldWithPath("_links.self.href").description("self link"),
+                                fieldWithPath("_links.signup.href").description("signup link"),
+                                fieldWithPath("_links.profile.href").description("api docs link")
+                        )
+                ));
     }
 
     @DisplayName("회원가입 - 정상 입력")
@@ -105,7 +169,7 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
                         links(
                                 linkWithRel("self").description("link to self"),
                                 linkWithRel("login").description("link to login"),
-                                linkWithRel("docs").description("link to api docs")
+                                linkWithRel("profile").description("link to api docs")
                                 ),
                         requestFields(
                                 fieldWithPath("nickname").description("ID"),
@@ -121,7 +185,7 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
                                 fieldWithPath("url").description("Profile URL"),
                                 fieldWithPath("_links.self.href").description("self link"),
                                 fieldWithPath("_links.login.href").description("login link"),
-                                fieldWithPath("_links.docs.href").description("api docs link")
+                                fieldWithPath("_links.profile.href").description("api docs link")
                         )));
 
         /* then */

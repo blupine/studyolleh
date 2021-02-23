@@ -1,4 +1,4 @@
-package com.studyolleh.modules.main;
+package com.studyolleh.modules.exception;
 
 import com.studyolleh.modules.account.Account;
 import com.studyolleh.modules.account.CurrentAccount;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import javax.servlet.http.HttpServletRequest;
 
 @Slf4j
-@ControllerAdvice
+@ControllerAdvice(basePackages = {"com.studyolleh.modules", "com.studyolleh.infra"})
 public class ExceptionAdvice {
 
     @ExceptionHandler

@@ -12,6 +12,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,13 +42,12 @@ public class RestAccountController {
             String authToken = loginService.createAuthToken(optional.get());
             entityModel = EntityModel.of(new LoginResultDto(authToken));
             entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("login").withSelfRel());
-            entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("my-info").withRel("user-info"));
+            entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("user-profile").withRel("user-profile"));
+            entityModel.add(Link.of("/docs/index.html#user-login-success").withRel("profile"));
+            return ResponseEntity.accepted().body(entityModel);
         } else {
-            entityModel = EntityModel.of(new LoginResultDto(null));
-            entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("login").withSelfRel());
-            entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("signup").withRel("signup"));
+            throw new BadCredentialsException("Unknown error");
         }
-        return ResponseEntity.created(uri).body(entityModel);
     }
 
     @PostMapping("/signup")
@@ -63,7 +63,7 @@ public class RestAccountController {
         EntityModel<SignUpResultDto> entityModel = EntityModel.of(signUpResultDto);
         entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("signup").withSelfRel());
         entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("login").withRel("login"));
-        entityModel.add(new Link("/docs/index.html#resources-user-signup").withRel("docs"));
+        entityModel.add(Link.of("/docs/index.html#user-signup").withRel("profile"));
         return ResponseEntity.created(uri).body(entityModel);
     }
 

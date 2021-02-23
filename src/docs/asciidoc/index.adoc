@@ -90,6 +90,23 @@ include::{snippets}/errors/http-response.adoc[]
 
 operation::user-signup[snippets='http-request,http-response,request-fields,response-fields,links']
 
+[[user-login]]
+== Login
+
+`Post` 요청을 사용하여 회원 가입을 요청할 수 있다.
+
+=== 로그인 성공
+
+operation::user-login-success[snippets='http-request,http-response,request-fields,response-fields,links']
+
+
+=== 로그인 실패
+
+operation::user-login-fail[snippets='http-request,http-response,request-fields,response-fields,links']
+
+
+
+
 
 [[resources]]
 = 리소스
