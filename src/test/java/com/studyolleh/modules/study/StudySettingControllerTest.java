@@ -11,9 +11,10 @@ import com.studyolleh.modules.account.domain.Account;
 import com.studyolleh.modules.study.domain.Study;
 import com.studyolleh.modules.study.domain.StudyTagItem;
 import com.studyolleh.modules.tag.form.TagForm;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import com.studyolleh.modules.zone.domain.Zone;
+import com.studyolleh.modules.zone.form.ZoneForm;
+import com.studyolleh.modules.zone.repository.ZoneRepository;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,9 +31,23 @@ class StudySettingControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;
+    @Autowired ZoneRepository zoneRepository;
     @Autowired AccountFactory accountFactory;
     @Autowired StudyFactory studyFactory;
     @Autowired ObjectMapper objectMapper;
+
+    private Zone testZone = Zone.builder().city("city").localNameOfCity("localName").province("province").build();
+
+    @BeforeEach
+    void beforeEach() {
+        zoneRepository.save(testZone);
+    }
+
+    @AfterEach
+    void afterEach() {
+        accountRepository.deleteAll();
+        zoneRepository.deleteAll();
+    }
 
     @Test
     @WithAccount(testName)
@@ -113,6 +128,27 @@ class StudySettingControllerTest extends AbstractContainerBaseTest {
         Set<String> tags = study.getTags().stream().map(studyTagItem -> studyTagItem.getTag().getTitle()).collect(Collectors.toSet());
 
         Assertions.assertTrue(tags.contains("test"));
+    }
+
+    @Test
+    @WithAccount(testName)
+    @DisplayName("지역 추가 - 성공")
+    void addZone_success() throws Exception {
+        Account account = accountRepository.findByNickname(testName);
+        Study study = studyFactory.createStudy("test-study", account);
+        String url = "/study/" + study.getEncodedPath() + "/settings/zones/add";
+
+        ZoneForm zoneForm = new ZoneForm();
+        zoneForm.setZoneName(testZone.toString());
+
+        mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(zoneForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+        Set<String> zones = study.getZones().stream().map(studyZoneItem -> studyZoneItem.getZone().toString()).collect(Collectors.toSet());
+
+        Assertions.assertTrue(zones.contains(testZone.toString()));
     }
 
 }

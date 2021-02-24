@@ -347,15 +347,15 @@
     <div class="row justify-content-center bg-light">
         <div class="col-10">
             <p>
-                <span th:each="tag: ${study.tags}"
+                <span th:each="tagItem: ${study.tags}"
                       class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
-                    <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
-                        <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+                    <a th:href="@{'/search/tag/' + ${tagItem.tag.title}}" class="text-decoration-none text-white">
+                        <i class="fa fa-tag"></i> <span th:text="${tagItem.tag.title}">Tag</span>
                     </a>
                 </span>
-                <span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
-                    <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
-                        <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}">City</span>
+                <span th:each="zoneItem: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                    <a th:href="@{'/search/zone/' + ${zoneItem.zone.id}}" class="text-decoration-none text-white">
+                        <i class="fa fa-globe"></i> <span th:text="${zoneItem.zone.localNameOfCity}">City</span>
                     </a>
                 </span>
             </p>
@@ -745,15 +745,16 @@
                         <h5 class="card-title context" th:text="${study.title}"></h5>
                     </a>
                     <p class="card-text" th:text="${study.shortDescription}">Short description</p>
+
                     <p class="card-text context">
-                                <span th:each="tag: ${study.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
-                                    <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
-                                        <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+                                <span th:each="tagItem: ${study.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                                    <a th:href="@{'/search/tag/' + ${tagItem.tag.title}}" class="text-decoration-none text-white">
+                                        <i class="fa fa-tag"></i> <span th:text="${tagItem.tag.title}">Tag</span>
                                     </a>
                                 </span>
-                        <span th:each="zone: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
-                                    <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
-                                        <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}" class="text-white">City</span>
+                        <span th:each="zoneItem: ${study.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                                    <a th:href="@{'/search/zone/' + ${zoneItem.zone.id}}" class="text-decoration-none text-white">
+                                        <i class="fa fa-globe"></i> <span th:text="${zoneItem.zone.localNameOfCity}" class="text-white">City</span>
                                     </a>
                                 </span>
                     </p>

@@ -96,7 +96,7 @@
                         <th scope="col">참가 신청 날짜</th>
                         <th scope="col">접수 상태</th>
                         <th scope="col" th:if="${study.isManager(#authentication.principal) &&
-                                event.eventType == T(com.studyolleh.modules.event.EventType).CONFIRMATIVE}">
+                                event.eventType == T(com.studyolleh.modules.event.domain.EventType).CONFIRMATIVE}">
                             참가 신청 관리
                         </th>
                         <th th:if="${study.isManager(#authentication.principal)}" scope="col">
@@ -130,7 +130,7 @@
                             <span class="font-weight-light" th:if="${!enroll.accepted}">대기중</span>
                         </td>
                         <td th:if="${study.isManager(#authentication.principal) &&
-                                event.eventType == T(com.studyolleh.modules.event.EventType).CONFIRMATIVE} ">
+                                event.eventType == T(com.studyolleh.modules.event.domain.EventType).CONFIRMATIVE} ">
                             <a th:if="${event.canAccept(enroll)}" class="btn btn-success"
                                th:href="@{'/study/studies/' + ${study.path} + '/event/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}">
                                 신청 수락
@@ -178,10 +178,10 @@
                     <div class="row px-2 d-flex align-items-end flex-column">
                         <div class="badge badge-secondary text-wrap mb-1">모집 방법</div>
                         <div class="text-right">
-                            <span th:if="${event.eventType == T(com.studyolleh.modules.event.EventType).FCFS}">
+                            <span th:if="${event.eventType == T(com.studyolleh.modules.event.domain.EventType).FCFS}">
                                 선착순
                             </span>
-                            <span th:if="${event.eventType == T(com.studyolleh.modules.event.EventType).CONFIRMATIVE}">
+                            <span th:if="${event.eventType == T(com.studyolleh.modules.event.domain.EventType).CONFIRMATIVE}">
                                 관리자 확인
                             </span>
                         </div>
