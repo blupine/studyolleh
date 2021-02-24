@@ -1,5 +1,6 @@
 package com.studyolleh.modules.study.repository;
 
+import com.studyolleh.modules.account.domain.Account;
 import com.studyolleh.modules.study.domain.Study;
 import com.studyolleh.modules.tag.domain.Tag;
 import com.studyolleh.modules.zone.domain.Zone;
@@ -16,4 +17,6 @@ public interface StudyRepositoryCustom {
     Page<Study> findByKeyword(String keyword, Pageable pageable);
 
     List<Study> findByTagsAndZones(Set<Tag> tags, Set<Zone> zones);
+
+
 }

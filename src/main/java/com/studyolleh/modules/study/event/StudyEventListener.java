@@ -42,7 +42,7 @@ public class StudyEventListener {
 
     @EventListener
     public void handleStudyCreatedEvent(StudyCreatedEvent studyCreatedEvent) {
-        Study study = studyRepository.findStudyWithTagsAndZonesById(studyCreatedEvent.getStudy().getId());
+        Study study = studyCreatedEvent.getStudy();
         Iterable<Account> accounts = accountRepository.findByTagsAndZones(studyService.getStudyTags(study), studyService.getStudyZones(study));
 
         accounts.forEach(account -> {
@@ -60,7 +60,7 @@ public class StudyEventListener {
 
     @EventListener
     public void handleStudyUpdateEvent(StudyUpdateEvent studyUpdateEvent) {
-        Study study = studyRepository.findStudyWithMembersAndMAnagersById(studyUpdateEvent.getStudy().getId());
+        Study study = studyUpdateEvent.getStudy();
         Set<Account> accounts = new HashSet<>();
         accounts.addAll(studyService.getStudyMembers(study));
         accounts.addAll(studyService.getStudyManagers(study));

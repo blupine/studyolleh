@@ -4,6 +4,7 @@ import com.studyolleh.modules.account.domain.Account;
 import com.studyolleh.modules.study.domain.*;
 import com.studyolleh.modules.study.event.StudyCreatedEvent;
 import com.studyolleh.modules.study.event.StudyUpdateEvent;
+import com.studyolleh.modules.study.repository.StudyAccountRepository;
 import com.studyolleh.modules.study.repository.StudyRepository;
 import com.studyolleh.modules.study.repository.StudyTagItemRepository;
 import com.studyolleh.modules.study.repository.StudyZoneItemRepository;
@@ -179,16 +180,26 @@ public class StudyService {
         }
     }
 
+    public void addManager(Study study, Account account) {
+        if (study.isJoinable(account)) {
+            study.addMember(studyAccountRepository.save(StudyAccount.createStudyAccount(study, account, true)));
+        } else {
+            throw new AccessDeniedException("스터디에 가입할 수 없습니다.");
+        }
+    }
+
     public void removeMember(Study study, Account account) {
         study.removeMember(account);
     }
 
     public List<Account> getStudyMembers(Study study) {
-        studyAccountRepository.findMembersByStudyAndIsManagers(study, false);
+        List<StudyAccount> members = studyAccountRepository.findMembersByStudyIdAndIsManager(study.getId(), false);
+        return members.stream().map(StudyAccount::getAccount).collect(Collectors.toList());
     }
 
     public List<Account> getStudyManagers(Study study) {
-
+        List<StudyAccount> members = studyAccountRepository.findMembersByStudyIdAndIsManager(study.getId(), true);
+        return members.stream().map(StudyAccount::getAccount).collect(Collectors.toList());
     }
 
     public Study findStudyWithManagersByPath(String path) {
@@ -210,11 +221,13 @@ public class StudyService {
     }
 
     public List<Study> getRecent5StudyContainingAsManager(Account account) {
-        return studyRepository.findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(account, false);
+        List<StudyAccount> studyAccounts = studyAccountRepository.findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(account, false);
+        return studyAccounts.stream().map(StudyAccount::getStudy).collect(Collectors.toList());
     }
 
     public List<Study> getRecent5StudyContainingAsMember(Account account) {
-        return studyRepository.findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(account, false);
+        List<StudyAccount> studyAccounts = studyAccountRepository.findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(account, false);
+        return studyAccounts.stream().map(StudyAccount::getStudy).collect(Collectors.toList());
     }
 
     public List<Study> getStudyContainingTagsAndZones(Set<Tag> tags, Set<Zone> zones) {

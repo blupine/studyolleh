@@ -60,7 +60,7 @@ public class StudyControllerTest extends AbstractContainerBaseTest {
         Study study = studyRepository.findByPath("test-path");
         assertNotNull(study);
         Account account = accountRepository.findByNickname(testName);
-        assertTrue(study.getManagers().contains(account));
+        assertTrue(studyService.getStudyMembers(study).contains(account));
     }
 
     @Test

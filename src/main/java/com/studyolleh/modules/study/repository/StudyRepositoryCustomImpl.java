@@ -3,6 +3,7 @@ package com.studyolleh.modules.study.repository;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 
+import com.studyolleh.modules.account.domain.Account;
 import com.studyolleh.modules.study.domain.QStudy;
 import com.studyolleh.modules.study.domain.Study;
 import com.studyolleh.modules.tag.domain.Tag;
@@ -52,4 +53,5 @@ public class StudyRepositoryCustomImpl extends QuerydslRepositorySupport impleme
                 .limit(9);
         return query.fetch();
     }
+
 }

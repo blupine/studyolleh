@@ -13,7 +13,6 @@ public interface StudyRepository extends JpaRepository<Study, Long>, StudyReposi
 
     boolean existsByPath(String path);
 
-    @EntityGraph(attributePaths = {"tags", "zones", "members", "managers"}, type = EntityGraph.EntityGraphType.LOAD)
     Study findByPath(String path);
 
     @EntityGraph(attributePaths = {"tags", "managers"})
@@ -38,9 +37,5 @@ public interface StudyRepository extends JpaRepository<Study, Long>, StudyReposi
 
     @EntityGraph(attributePaths = {"tags", "zones"})
     List<Study> findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(boolean published, boolean closed);
-
-    List<Study> findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(Account account, boolean closed);
-
-    List<Study> findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(Account account, boolean closed);
 
 }

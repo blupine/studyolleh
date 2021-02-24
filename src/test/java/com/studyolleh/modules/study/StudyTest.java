@@ -2,18 +2,26 @@ package com.studyolleh.modules.study;
 
 import com.studyolleh.modules.account.domain.Account;
 import com.studyolleh.modules.account.authentication.UserAccount;
+import com.studyolleh.modules.account.service.AccountService;
 import com.studyolleh.modules.study.domain.Study;
+import com.studyolleh.modules.study.service.StudyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringBootTest
 class StudyTest {
 
     Study study;
     Account account;
     UserAccount userAccount;
+
+    @Autowired
+    StudyService studyService;
 
     @BeforeEach
     void beforeEach() {
@@ -22,6 +30,7 @@ class StudyTest {
         account.setNickname("testName");
         account.setPassword("12341234");
         userAccount = new UserAccount(account);
+
 
     }
 
@@ -39,7 +48,7 @@ class StudyTest {
     void isJoinable_false_for_manager() {
         study.setPublished(true);
         study.setRecruiting(true);
-        study.addManager(account);
+        studyService.addManager(study, account);
 
         assertFalse(study.isJoinable(userAccount));
     }
@@ -49,7 +58,7 @@ class StudyTest {
     void isJoinable_false_for_member() {
         study.setPublished(true);
         study.setRecruiting(true);
-        study.addMember(account);
+        studyService.addMember(study, account);
 
         assertFalse(study.isJoinable(userAccount));
     }
@@ -71,14 +80,15 @@ class StudyTest {
     @DisplayName("스터디 관리자인지 확인")
     @Test
     void isManager() {
-        study.addManager(account);
+        studyService.addManager(study, account);
         assertTrue(study.isManager(userAccount));
     }
 
     @DisplayName("스터디 멤버인지 확인")
     @Test
     void isMember() {
-        study.addMember(account);
+
+        studyService.addMember(study, account);
         assertTrue(study.isMember(userAccount));
     }
 
