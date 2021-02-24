@@ -3,10 +3,10 @@ package com.studyolleh.modules.study.repository;
 import com.querydsl.jpa.JPQLQuery;
 import com.studyolleh.modules.account.domain.Account;
 import com.studyolleh.modules.account.domain.QAccount;
-import com.studyolleh.modules.study.domain.QStudy;
-import com.studyolleh.modules.study.domain.QStudyAccount;
-import com.studyolleh.modules.study.domain.Study;
-import com.studyolleh.modules.study.domain.StudyAccount;
+import com.studyolleh.modules.account.domain.QTagItem;
+import com.studyolleh.modules.study.domain.*;
+import com.studyolleh.modules.tag.domain.QTag;
+import com.studyolleh.modules.zone.domain.QZone;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
@@ -60,6 +60,41 @@ public class StudyAccountRepositoryImpl extends QuerydslRepositorySupport implem
                 .innerJoin(studyAccount.study, QStudy.study).fetchJoin()
                 .innerJoin(studyAccount.account, QAccount.account).fetchJoin()
                 .where(QStudy.study.id.eq(studyId));
-        return query.fetch();    }
+        return query.fetch();
+    }
+
+    @Override
+    public StudyAccount findStudyAccountWithAccountAndStudyByPathAndIsManager(String path, boolean isManager) {
+        QStudyAccount studyAccount = QStudyAccount.studyAccount;
+        JPQLQuery<StudyAccount> query = from(studyAccount)
+                .innerJoin(studyAccount.study, QStudy.study).fetchJoin()
+                .innerJoin(studyAccount.account, QAccount.account).fetchJoin()
+                .where(studyAccount.isManager.eq(isManager).and(QStudy.study.path.eq(path)));
+        return query.fetchOne();
+    }
+
+    @Override
+    public StudyAccount findStudyAccountWithAccountAndStudyAndStudyTagsByPath(String path) {
+        QStudyAccount studyAccount = QStudyAccount.studyAccount;
+        JPQLQuery<StudyAccount> query = from(studyAccount)
+                .innerJoin(studyAccount.study, QStudy.study).fetchJoin()
+                .innerJoin(studyAccount.account, QAccount.account).fetchJoin()
+                .leftJoin(QStudy.study.tags, QStudyTagItem.studyTagItem).fetchJoin()
+                .leftJoin(QStudyTagItem.studyTagItem.tag, QTag.tag).fetchJoin()
+                .where(QStudy.study.path.eq(path));
+        return query.fetchOne();
+    }
+
+    @Override
+    public StudyAccount findStudyAccountWithAccountAndStudyAndStudyZonesByPath(String path) {
+        QStudyAccount studyAccount = QStudyAccount.studyAccount;
+        JPQLQuery<StudyAccount> query = from(studyAccount)
+                .innerJoin(studyAccount.study, QStudy.study).fetchJoin()
+                .innerJoin(studyAccount.account, QAccount.account).fetchJoin()
+                .leftJoin(QStudy.study.zones, QStudyZoneItem.studyZoneItem).fetchJoin()
+                .leftJoin(QStudyZoneItem.studyZoneItem.zone, QZone.zone).fetchJoin()
+                .where(QStudy.study.path.eq(path));
+        return query.fetchOne();
+    }
 }
 

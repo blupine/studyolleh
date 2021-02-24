@@ -18,5 +18,4 @@ public interface StudyRepositoryCustom {
 
     List<Study> findByTagsAndZones(Set<Tag> tags, Set<Zone> zones);
 
-
 }

@@ -93,21 +93,24 @@ public class StudyService {
     }
 
     public Study getStudyToUpdateTag(Account account, String path) {
-        Study study = studyRepository.findStudyWithTagsByPath(path);
+        StudyAccount studyAccount = studyAccountRepository.findStudyAccountWithAccountAndStudyAndStudyTagsByPath(path);
+        Study study = studyAccount.getStudy();
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
     }
 
     public Study getStudyToUpdateZone(Account account, String path) {
-        Study study = studyRepository.findStudyWithZonesByPath(path);
+        StudyAccount studyAccount = studyAccountRepository.findStudyAccountWithAccountAndStudyAndStudyZonesByPath(path);
+        Study study = studyAccount.getStudy();
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
     }
 
     public Study getStudyToUpdateStatus(Account account, String path) {
-        Study study = studyRepository.findStudyWithManagersByPath(path);
+        StudyAccount studyAccount = studyAccountRepository.findStudyAccountWithAccountAndStudyByPathAndIsManager(path, true);
+        Study study = studyAccount.getStudy();
         checkIfExistingStudy(path, study);
         checkIfManager(account, study);
         return study;
@@ -207,7 +210,7 @@ public class StudyService {
     }
 
     public Study findStudyWithManagersByPath(String path) {
-        return studyRepository.findStudyWithManagersByPath(path);
+        return studyAccountRepository.findStudyAccountWithAccountAndStudyByPathAndIsManager(path, true).getStudy();
     }
 
     public Study findStudyToEnroll(String path) {

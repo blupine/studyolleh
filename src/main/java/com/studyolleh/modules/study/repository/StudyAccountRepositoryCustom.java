@@ -18,4 +18,10 @@ public interface StudyAccountRepositoryCustom {
     List<StudyAccount> findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(Account account, boolean closed);
 
     List<StudyAccount> findFirst5ByMembersContainingAndClosedOrderByPublishedDateTimeDesc(Account account, boolean closed);
+
+    StudyAccount findStudyAccountWithAccountAndStudyByPathAndIsManager(String path, boolean isManager);
+
+    StudyAccount findStudyAccountWithAccountAndStudyAndStudyTagsByPath(String path);
+
+    StudyAccount findStudyAccountWithAccountAndStudyAndStudyZonesByPath(String path);
 }

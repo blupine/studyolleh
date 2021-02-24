@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.domain.TagItem;
+import com.studyolleh.modules.account.domain.ZoneItem;
 import com.studyolleh.modules.account.repository.AccountRepository;
 import com.studyolleh.modules.account.service.AccountService;
 import com.studyolleh.modules.tag.domain.Tag;
@@ -22,6 +24,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static com.studyolleh.modules.account.controller.SettingController.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
@@ -32,13 +37,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class SettingControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
-    @Autowired
-    AccountRepository accountRepository;
+    @Autowired AccountRepository accountRepository;
     @Autowired PasswordEncoder passwordEncoder;
     @Autowired ObjectMapper objectMapper;
     @Autowired TagRepository tagRepository;
-    @Autowired
-    AccountService accountService;
+    @Autowired AccountService accountService;
     @Autowired ZoneRepository zoneRepository;
 
     private Zone testZone = Zone.builder().city("city").localNameOfCity("localName").province("province").build();
@@ -120,7 +123,8 @@ class SettingControllerTest extends AbstractContainerBaseTest {
                 .andExpect(status().isOk());
 
         Zone zone = zoneRepository.findByCityAndProvince(testZone.getCity(), testZone.getProvince());
-        assertFalse(account.getZones().contains(zone));
+        boolean contains = account.getZones().stream().map(ZoneItem::getZone).collect(Collectors.toSet()).contains(zone);
+        assertFalse(contains);
     }
 
     @WithAccount(testName)
@@ -174,7 +178,8 @@ class SettingControllerTest extends AbstractContainerBaseTest {
                 .with(csrf()))
                 .andExpect(status().isOk());
 
-        assertFalse(account.getTags().contains(newTag));
+        Set<Tag> tags = account.getTags().stream().map(TagItem::getTag).collect(Collectors.toSet());
+        assertFalse(tags.contains(newTag));
 
     }
 

@@ -1,16 +1,25 @@
 package com.studyolleh.modules.study;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyolleh.infra.AbstractContainerBaseTest;
 import com.studyolleh.infra.MockMvcTest;
 import com.studyolleh.modules.account.AccountFactory;
+import com.studyolleh.modules.account.domain.TagItem;
 import com.studyolleh.modules.account.repository.AccountRepository;
 import com.studyolleh.modules.account.WithAccount;
 import com.studyolleh.modules.account.domain.Account;
 import com.studyolleh.modules.study.domain.Study;
+import com.studyolleh.modules.study.domain.StudyTagItem;
+import com.studyolleh.modules.tag.form.TagForm;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -23,6 +32,7 @@ class StudySettingControllerTest extends AbstractContainerBaseTest {
     @Autowired AccountRepository accountRepository;
     @Autowired AccountFactory accountFactory;
     @Autowired StudyFactory studyFactory;
+    @Autowired ObjectMapper objectMapper;
 
     @Test
     @WithAccount(testName)
@@ -83,4 +93,26 @@ class StudySettingControllerTest extends AbstractContainerBaseTest {
                 .andExpect(model().attributeExists("study"))
                 .andExpect(model().attributeExists("account"));
     }
+
+
+    @Test
+    @WithAccount(testName)
+    @DisplayName("태그 추가 - 성공")
+    void addTag_success() throws Exception {
+        Account account = accountRepository.findByNickname(testName);
+        Study study = studyFactory.createStudy("test-study", account);
+        String url = "/study/" + study.getEncodedPath() + "/settings/tags/add";
+
+        TagForm tagForm = new TagForm();
+        tagForm.setTagTitle("test");
+        mockMvc.perform(post(url)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(tagForm))
+                .with(csrf()))
+                .andExpect(status().isOk());
+        Set<String> tags = study.getTags().stream().map(studyTagItem -> studyTagItem.getTag().getTitle()).collect(Collectors.toSet());
+
+        Assertions.assertTrue(tags.contains("test"));
+    }
+
 }

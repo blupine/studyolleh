@@ -15,25 +15,10 @@ public interface StudyRepository extends JpaRepository<Study, Long>, StudyReposi
 
     Study findByPath(String path);
 
-    @EntityGraph(attributePaths = {"tags", "managers"})
-    Study findStudyWithTagsByPath(String path);
-
-    @EntityGraph(attributePaths = {"zones", "managers"})
-    Study findStudyWithZonesByPath(String path);
-
-    @EntityGraph(attributePaths = {"managers"})
-    Study findStudyWithManagersByPath(String path);
-
     @EntityGraph(attributePaths = {"members"})
     Study findStudyWithMembersAndManagersByPath(String path);
 
     Study findStudyOnlyByPath(String path);
-
-    @EntityGraph(attributePaths = {"tags", "zones"})
-    Study findStudyWithTagsAndZonesById(Long id);
-
-    @EntityGraph(attributePaths = {"members", "managers"})
-    Study findStudyWithMembersAndMAnagersById(Long id);
 
     @EntityGraph(attributePaths = {"tags", "zones"})
     List<Study> findFirst9ByPublishedAndClosedOrderByPublishedDateTimeDesc(boolean published, boolean closed);

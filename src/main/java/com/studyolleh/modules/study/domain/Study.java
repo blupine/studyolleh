@@ -81,27 +81,27 @@ public class Study {
 
     public boolean isJoinable(Account account) {
         return this.isPublished() && this.isRecruiting()
-                && !this.members.stream().map(studyAccount -> studyAccount.getAccount().getId()).collect(Collectors.toSet()).contains(account.getId());
+                && !this.members.stream().map(sa -> sa.getAccount().getId()).collect(Collectors.toSet()).contains(account.getId());
     }
 
     public boolean isMember(UserAccount userAccount) {
         return this.members.stream().filter(sa -> !sa.isManager())
-                .map(StudyAccount::getId).collect(Collectors.toSet()).contains(userAccount.getAccount().getId());
+                .map(sa -> sa.getAccount().getId()).collect(Collectors.toSet()).contains(userAccount.getAccount().getId());
     }
 
     public boolean isManager(UserAccount userAccount) {
         return this.members.stream().filter(sa -> sa.isManager())
-                .map(StudyAccount::getId).collect(Collectors.toSet()).contains(userAccount.getAccount().getId());
+                .map(sa -> sa.getAccount().getId()).collect(Collectors.toSet()).contains(userAccount.getAccount().getId());
     }
 
     public boolean isManagedBy(Account account) {
         return this.members.stream().filter(sa -> sa.isManager())
-                .map(StudyAccount::getId).collect(Collectors.toSet()).contains(account.getId());
+                .map(sa -> sa.getAccount().getId()).collect(Collectors.toSet()).contains(account.getId());
     }
 
     public boolean isMember(Account account) {
         return this.members.stream().filter(sa -> !sa.isManager())
-                .map(StudyAccount::getId).collect(Collectors.toSet()).contains(account.getId());
+                .map(sa -> sa.getAccount().getId()).collect(Collectors.toSet()).contains(account.getId());
     }
 
     public String getImage() {
