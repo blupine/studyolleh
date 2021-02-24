@@ -112,7 +112,7 @@
                     <tr th:each="enroll: ${enrollments}">
                         <th scope="row" th:text="${enrollStat.count}"></th>
                         <td>
-                            <a th:href="@{'/account/profile/' + ${enroll.account.nickname}}" class="text-decoration-none">
+                            <a th:href="@{'/profile/' + ${enroll.account.nickname}}" class="text-decoration-none">
                                 <svg th:if="${#strings.isEmpty(enroll.account?.profileImage)}"
                                      th:data-jdenticon-value="${enroll.account.nickname}"
                                      width="24" height="24" class="rounded border bg-light"></svg>
@@ -131,22 +131,23 @@
                         </td>
                         <td th:if="${study.isManager(#authentication.principal) &&
                                 event.eventType == T(com.studyolleh.modules.event.domain.EventType).CONFIRMATIVE} ">
+                            <!-- TODO : URL controller should be implemented-->
                             <a th:if="${event.canAccept(enroll)}" class="btn btn-success"
-                               th:href="@{'/study/studies/' + ${study.path} + '/event/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}">
+                               th:href="@{'/study/' + ${study.path} + '/event/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}">
                                 신청 수락
                             </a>
                             <a th:if="${event.canReject(enroll)}" class="btn btn-warning"
-                               th:href="@{'/study/studies/' + ${study.path} + '/event/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}">
+                               th:href="@{'/study/' + ${study.path} + '/event/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}">
                                 취소
                             </a>
                         </td>
                         <td th:if="${study.isManager(#authentication.principal)}">
                             <a th:if="${event.isStarted() && enroll.accepted && !enroll.attended}" class="btn btn-success"
-                               th:href="@{'/study/studies/' + ${study.path} + '/event/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">
+                               th:href="@{'/study/' + ${study.path} + '/event/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">
                                 체크인
                             </a>
                             <a th:if="${event.isStarted() && enroll.accepted && enroll.attended}" class="btn btn-warning"
-                               th:href="@{'/study/studies/' + ${study.path} + '/event/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin-cancel'}">
+                               th:href="@{'/study/' + ${study.path} + '/event/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin-cancel'}">
                                 취소
                             </a>
                         </td>
@@ -231,7 +232,7 @@
                     <div class="row px-2 d-flex align-items-end flex-column">
                         <div class="badge badge-secondary text-wrap mb-1">모임 관리자</div>
                         <div>
-                            <a th:href="@{'/account/profile/' + ${event.createdBy?.nickname}}" class="text-decoration-none">
+                            <a th:href="@{'/profile/' + ${event.createdBy?.nickname}}" class="text-decoration-none">
                                 <svg th:if="${#strings.isEmpty(event.createdBy?.profileImage)}"
                                      th:data-jdenticon-value="${event.createdBy?.nickname}"
                                      width="24" height="24" class="rounded border bg-light"></svg>

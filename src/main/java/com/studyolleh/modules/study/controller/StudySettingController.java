@@ -186,7 +186,7 @@ public class StudySettingController {
         return "study/settings/study";
     }
 
-    @PostMapping("study/publish")
+    @PostMapping("/study/publish")
     public String publishStudy(@CurrentAccount Account account, @PathVariable String path, Model model,
                                RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
@@ -197,7 +197,7 @@ public class StudySettingController {
         return "redirect:/study/"+ study.getEncodedPath() + "/settings/study";
     }
 
-    @PostMapping("study/close")
+    @PostMapping("/study/close")
     public String closeStudy(@CurrentAccount Account account, @PathVariable String path, Model model,
                              RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
@@ -208,7 +208,7 @@ public class StudySettingController {
         return "redirect:/study/" + study.getEncodedPath() + "/settings/study";
     }
 
-    @PostMapping("recruit/start")
+    @PostMapping("/recruit/start")
     public String startRecruit(@CurrentAccount Account account, @PathVariable String path, Model model,
                                RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
@@ -223,7 +223,7 @@ public class StudySettingController {
         return "redirect:/study/"+ study.getEncodedPath() + "/settings/study";
     }
 
-    @PostMapping("recruit/stop")
+    @PostMapping("/recruit/stop")
     public String stopRecruit(@CurrentAccount Account account, @PathVariable String path, Model model,
                               RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
@@ -238,7 +238,7 @@ public class StudySettingController {
         return "redirect:/study/"+ study.getEncodedPath() + "/settings/study";
     }
 
-    @PostMapping("study/path")
+    @PostMapping("/study/path")
     public String updatePath(@CurrentAccount Account account, @PathVariable String path, @RequestParam String newPath,
                              Model model, RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
@@ -253,7 +253,7 @@ public class StudySettingController {
         return "redirect:/study/" + study.getEncodedPath() + "/settings/study";
     }
 
-    @PostMapping("study/title")
+    @PostMapping("/study/title")
     public String updateTitle(@CurrentAccount Account account, @PathVariable String path, @RequestParam String newTitle,
                               Model model, RedirectAttributes attributes) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
@@ -267,7 +267,7 @@ public class StudySettingController {
         return "redirect:/study/" + study.getEncodedPath() + "/settings/study";
     }
 
-    @PostMapping("study/remove")
+    @PostMapping("/study/remove")
     public String removeStudy(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Study study = studyService.getStudyToUpdateStatus(account, path);
         studyService.removeStudy(study);
