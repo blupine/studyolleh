@@ -202,6 +202,10 @@ public class StudyService {
         return members.stream().map(StudyAccount::getAccount).collect(Collectors.toList());
     }
 
+    public List<StudyAccount> getStudyMembersAndManagers(Study study) {
+        return studyAccountRepository.findMembersAndManagersByStudyId(study.getId());
+    }
+
     public Study findStudyWithManagersByPath(String path) {
         return studyRepository.findStudyWithManagersByPath(path);
     }

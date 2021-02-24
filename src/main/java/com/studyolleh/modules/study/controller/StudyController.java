@@ -2,6 +2,7 @@ package com.studyolleh.modules.study.controller;
 
 import com.studyolleh.modules.account.authentication.CurrentAccount;
 import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.study.domain.StudyAccount;
 import com.studyolleh.modules.study.repository.StudyRepository;
 import com.studyolleh.modules.study.service.StudyService;
 import com.studyolleh.modules.study.domain.Study;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @Controller
@@ -61,8 +63,11 @@ public class StudyController {
     @GetMapping("/study/{path}/members")
     public String viewStudyMembers(@CurrentAccount Account account, @PathVariable String path, Model model){
         Study study = studyService.getStudy(path);
+        List<StudyAccount> studyMembers = studyService.getStudyMembersAndManagers(study);
+
         model.addAttribute(account);
         model.addAttribute(study);
+        model.addAttribute("studyMembers", studyMembers);
         return "study/members";
     }
 

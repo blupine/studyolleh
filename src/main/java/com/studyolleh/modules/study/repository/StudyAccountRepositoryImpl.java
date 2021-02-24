@@ -52,5 +52,14 @@ public class StudyAccountRepositoryImpl extends QuerydslRepositorySupport implem
                                         .and(QStudy.study.closed.eq(closed))));
         return query.fetch();
     }
+
+    @Override
+    public List<StudyAccount> findMembersAndManagersByStudyId(Long studyId) {
+        QStudyAccount studyAccount = QStudyAccount.studyAccount;
+        JPQLQuery<StudyAccount> query = from(studyAccount)
+                .innerJoin(studyAccount.study, QStudy.study).fetchJoin()
+                .innerJoin(studyAccount.account, QAccount.account).fetchJoin()
+                .where(QStudy.study.id.eq(studyId));
+        return query.fetch();    }
 }
 

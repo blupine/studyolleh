@@ -10,10 +10,13 @@ import com.studyolleh.modules.account.domain.Account;
 import com.studyolleh.modules.study.domain.Study;
 import com.studyolleh.modules.study.repository.StudyRepository;
 import com.studyolleh.modules.study.service.StudyService;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -21,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Slf4j
 @MockMvcTest
 public class StudyControllerTest extends AbstractContainerBaseTest {
 
@@ -60,7 +64,8 @@ public class StudyControllerTest extends AbstractContainerBaseTest {
         Study study = studyRepository.findByPath("test-path");
         assertNotNull(study);
         Account account = accountRepository.findByNickname(testName);
-        assertTrue(studyService.getStudyMembers(study).contains(account));
+        List<Account> studyManagers = studyService.getStudyManagers(study);
+        assertTrue(studyManagers.contains(account));
     }
 
     @Test
@@ -155,7 +160,8 @@ public class StudyControllerTest extends AbstractContainerBaseTest {
                 .andExpect(redirectedUrl("/study/" + study.getEncodedPath() + "/members"));
 
         Account account2 = accountRepository.findByNickname(testName);
-        assertTrue(study.getMembers().contains(account2));
+        List<Account> studyMembers = studyService.getStudyMembers(study);
+        assertTrue(studyMembers.contains(account2));
     }
 
     @Test

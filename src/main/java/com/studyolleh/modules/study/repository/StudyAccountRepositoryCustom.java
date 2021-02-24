@@ -12,6 +12,8 @@ public interface StudyAccountRepositoryCustom {
 
     List<StudyAccount> findMembersByStudyIdAndIsManager(Long studyId, boolean isManager);
 
+    List<StudyAccount> findMembersAndManagersByStudyId(Long studyId);
+
     //TODO : should fix broke query
     List<StudyAccount> findFirst5ByManagersContainingAndClosedOrderByPublishedDateTimeDesc(Account account, boolean closed);
 
