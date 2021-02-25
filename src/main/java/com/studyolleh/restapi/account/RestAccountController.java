@@ -1,8 +1,8 @@
 package com.studyolleh.restapi.account;
 
-import com.studyolleh.modules.account.Account;
-import com.studyolleh.modules.account.AccountService;
-import com.studyolleh.modules.account.CurrentAccount;
+import com.studyolleh.modules.account.authentication.CurrentAccount;
+import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.service.AccountService;
 import com.studyolleh.restapi.account.dto.*;
 import com.studyolleh.restapi.account.validator.SignUpRequestDtoValidator;
 import lombok.RequiredArgsConstructor;
@@ -80,4 +80,9 @@ public class RestAccountController {
         }
         return ResponseEntity.created(uri).body(null);
     }
+
+    // TODO : 이메일 인증 링크 가져오기
+
+    // TODO : 
+
 }

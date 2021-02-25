@@ -1,5 +1,8 @@
 package com.studyolleh.modules.account;
 
+import com.studyolleh.modules.account.authentication.UserAccount;
+import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -1,11 +1,10 @@
 package com.studyolleh.restapi.account.validator;
 
-import com.studyolleh.modules.account.AccountRepository;
+import com.studyolleh.modules.account.repository.AccountRepository;
 import com.studyolleh.restapi.account.dto.SignUpRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 @Component
 @RequiredArgsConstructor

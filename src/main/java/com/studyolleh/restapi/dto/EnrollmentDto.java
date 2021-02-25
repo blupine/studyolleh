@@ -1,6 +1,5 @@
 package com.studyolleh.restapi.dto;
 
-import com.studyolleh.modules.event.Enrollment;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

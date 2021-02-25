@@ -1,8 +1,8 @@
 package com.studyolleh.restapi.account;
 
 import com.studyolleh.infra.config.security.JwtTokenProvider;
-import com.studyolleh.modules.account.Account;
-import com.studyolleh.modules.account.UserAccount;
+import com.studyolleh.modules.account.authentication.UserAccount;
+import com.studyolleh.modules.account.domain.Account;
 import com.studyolleh.restapi.account.dto.AccountDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

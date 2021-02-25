@@ -32,8 +32,6 @@ public class MainController {
         model.addAttribute("studyList", studyService.getRecent9StudyForIndexPage());
 
         if(account != null){
-
-
             Account loadedAccount = accountService.getAccountWithTagsAndZones(account);
             List<Enrollment> enrollmentList = enrollmentService.getEnrollmentByAccountWithEventAndStudy(account);
             List<Study> asManager = studyService.getRecent5StudyContainingAsManager(account);
