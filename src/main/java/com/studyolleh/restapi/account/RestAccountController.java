@@ -2,9 +2,11 @@ package com.studyolleh.restapi.account;
 
 import com.studyolleh.modules.account.authentication.CurrentAccount;
 import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.repository.AccountRepository;
 import com.studyolleh.modules.account.service.AccountService;
 import com.studyolleh.restapi.account.dto.*;
 import com.studyolleh.restapi.account.validator.SignUpRequestDtoValidator;
+import com.studyolleh.restapi.exception.ErrorResponse;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.hateoas.EntityModel;
@@ -28,9 +30,9 @@ public class RestAccountController {
     private final SignUpRequestDtoValidator signUpRequestDtoValidator;
     private final AccountService accountService;
     private final RestAccountService loginService;
+    private final AccountRepository accountRepository;
     private final ModelMapper modelMapper;
-    private WebMvcLinkBuilder webMvcLinkBuilder = WebMvcLinkBuilder.linkTo(RestAccountController.class);
-    private URI uri = webMvcLinkBuilder.toUri();
+
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginRequestDto loginRequestDto, Errors errors) {
@@ -40,9 +42,9 @@ public class RestAccountController {
 
         if (optional.isPresent()) {
             String authToken = loginService.createAuthToken(optional.get());
-            entityModel = EntityModel.of(new LoginResultDto(authToken));
+            entityModel = EntityModel.of(LoginResultDto.of(authToken));
             entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("login").withSelfRel());
-            entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("user-profile").withRel("user-profile"));
+            entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("my-info").withRel("my-info"));
             entityModel.add(Link.of("/docs/index.html#user-login-success").withRel("profile"));
             return ResponseEntity.accepted().body(entityModel);
         } else {
@@ -65,7 +67,7 @@ public class RestAccountController {
         entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("signup").withSelfRel());
         entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("login").withRel("login"));
         entityModel.add(Link.of("/docs/index.html#user-signup").withRel("profile"));
-        return ResponseEntity.created(uri).body(entityModel);
+        return ResponseEntity.created(createUri("signup")).body(entityModel);
     }
 
     @GetMapping("/my-info")
@@ -76,13 +78,31 @@ public class RestAccountController {
             entityModel = EntityModel.of(accountDto);
             entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("my-info").withSelfRel());
             // TODO : need to add next link
-            return ResponseEntity.created(uri).body(entityModel);
+            return ResponseEntity.created(createUri("my-info")).body(entityModel);
         }
-        return ResponseEntity.created(uri).body(null);
+        return ResponseEntity.notFound().build();
     }
 
-    // TODO : 이메일 인증 링크 가져오기
+    // TODO : 이메일 인증하기
+    @GetMapping("/check-email-token")
+    public ResponseEntity checkEmailToken(String token, String email) {
+        Account account = accountRepository.findByEmail(email);
 
-    // TODO : 
+        if (account != null && account.isValidToken(token)) {
+            accountService.completeSignUp(account);
+            CheckEmailResponseDto dto = CheckEmailResponseDto.of(accountRepository.count(), account.getNickname());
+            EntityModel entityModel = EntityModel.of(dto);
+            entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("check-email-token").withSelfRel());
+            entityModel.add(WebMvcLinkBuilder.linkTo(RestAccountController.class).slash("my-info").withRel("my-info"));
+            entityModel.add(Link.of("/docs/index.html#check-email-token").withRel("profile"));
+            return ResponseEntity.accepted().body(entityModel);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    private static URI createUri(String resource) {
+        WebMvcLinkBuilder webMvcLinkBuilder = WebMvcLinkBuilder.linkTo(RestAccountController.class).slash(resource);
+        return webMvcLinkBuilder.toUri();
+    }
 
 }

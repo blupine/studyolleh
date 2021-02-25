@@ -26,7 +26,9 @@ import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.li
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
@@ -38,6 +40,7 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
     @Autowired ObjectMapper objectMapper;
     @Autowired AccountRepository accountRepository;
     @Autowired AccountService accountService;
+    @Autowired AccountFactory accountFactory;
 
     @DisplayName("로그인 요청 - 성공")
     @Test
@@ -49,11 +52,7 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
                 .build();
         accountService.processNewAccountWithDto(signUpRequestDto);
 
-        LoginRequestDto loginRequestDto = LoginRequestDto.builder()
-                .username("blupine")
-                .password("asdfasdf")
-                .build();
-
+        LoginRequestDto loginRequestDto = LoginRequestDto.of("blupine", "asdfasdf");
         mockMvc.perform(post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
@@ -62,12 +61,12 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
                 .andExpect(jsonPath("authToken").hasJsonPath())
                 .andExpect(jsonPath("_links").hasJsonPath())
                 .andExpect(jsonPath("_links.self").hasJsonPath())
-                .andExpect(jsonPath("_links.user-profile").hasJsonPath())
+                .andExpect(jsonPath("_links.my-info").hasJsonPath())
                 .andExpect(jsonPath("_links.profile").hasJsonPath())
                 .andDo(document("user-login-success",
                         links(
                                 linkWithRel("self").description("link to self"),
-                                linkWithRel("user-profile").description("link to login user's profile"),
+                                linkWithRel("my-info").description("link to login user's profile"),
                                 linkWithRel("profile").description("link to api docs")
                         ),
                         requestFields(
@@ -77,7 +76,7 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
                         responseFields(
                                 fieldWithPath("authToken").description("JWT Token can be used to authenticate user to server."),
                                 fieldWithPath("_links.self.href").description("self link"),
-                                fieldWithPath("_links.user-profile.href").description("user's profile link"),
+                                fieldWithPath("_links.my-info.href").description("user's profile link"),
                                 fieldWithPath("_links.profile.href").description("api docs link")
                         )
                 ));
@@ -93,11 +92,7 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
                 .build();
         accountService.processNewAccountWithDto(signUpRequestDto);
 
-        LoginRequestDto loginRequestDto = LoginRequestDto.builder()
-                .username("blupine")
-                .password("asdfasdf+fail")
-                .build();
-
+        LoginRequestDto loginRequestDto = LoginRequestDto.of("blupine", "asdfasdf+fail");
         mockMvc.perform(post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaTypes.HAL_JSON)
@@ -154,6 +149,7 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
                 .andExpect(jsonPath("_links").hasJsonPath())
                 .andExpect(jsonPath("_links.self").hasJsonPath())
                 .andExpect(jsonPath("_links.login").hasJsonPath())
+                .andExpect(jsonPath("_links.profile").hasJsonPath())
                 .andDo(document("user-signup",
                         links(
                                 linkWithRel("self").description("link to self"),
@@ -182,4 +178,42 @@ public class RestAccountControllerTest extends AbstractContainerBaseTest {
         Assertions.assertNotNull(accountAfter);
     }
 
+    @DisplayName("이메일 인증 - 성공")
+    @Test
+    void checkEmailSuccess() throws Exception {
+        Account account = accountFactory.createAccount("testname");
+
+        mockMvc.perform(get("/api/check-email-token")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaTypes.HAL_JSON)
+                .param("token", account.getEmailCheckToken())
+                .param("email", account.getEmail()))
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("memberCount").hasJsonPath())
+                .andExpect(jsonPath("nickname").hasJsonPath())
+                .andExpect(jsonPath("_links").hasJsonPath())
+                .andExpect(jsonPath("_links.self").hasJsonPath())
+                .andExpect(jsonPath("_links.my-info").hasJsonPath())
+                .andExpect(jsonPath("_links.profile").hasJsonPath())
+                .andDo(print())
+                .andDo(document("check-email-token",
+                        links(
+                                linkWithRel("self").description("link to self"),
+                                linkWithRel("my-info").description("link to login user info"),
+                                linkWithRel("profile").description("link to api docs")
+                        ),
+                        requestParameters(
+                                parameterWithName("token").description("Email authentication token send from server through email."),
+                                parameterWithName("email").description("Email address")
+                        ),
+                        responseFields(
+                                fieldWithPath("memberCount").description("Total Member count"),
+                                fieldWithPath("nickname").description("Authenticated user's nickname"),
+                                fieldWithPath("_links.self.href").description("self link"),
+                                fieldWithPath("_links.my-info.href").description("user's profile link"),
+                                fieldWithPath("_links.profile.href").description("api docs link")
+                        )));
+
+        Assertions.assertTrue(account.isEmailVerified());
+    }
 }

@@ -1,25 +1,21 @@
 package com.studyolleh.restapi.account.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@Builder
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
 public class AccountDto {
 
     private Long id;
 
-    private String email;
-
     private String nickname;
 
     private String password;
+
+    private String email;
 
     private boolean emailVerified;
 

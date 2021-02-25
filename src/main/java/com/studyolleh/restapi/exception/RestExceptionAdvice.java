@@ -1,4 +1,4 @@
-package com.studyolleh.modules.exception;
+package com.studyolleh.restapi.exception;
 
 import com.studyolleh.restapi.account.RestAccountController;
 import org.springframework.hateoas.EntityModel;
@@ -23,5 +23,6 @@ public class RestExceptionAdvice {
         entityModel.add(Link.of("/docs/index.html#user-login-fail").withRel("profile"));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(entityModel);
     }
+
 
 }

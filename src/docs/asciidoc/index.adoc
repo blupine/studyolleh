@@ -106,6 +106,11 @@ operation::user-login-success[snippets='http-request,http-response,request-field
 
 operation::user-login-fail[snippets='http-request,http-response,request-fields,response-fields,links']
 
+[[check-email-token]]
+=== 이메일 인증
+
+operator::check-email-token[snippets='request-parameters,response-fields,links']
+
 
 
 

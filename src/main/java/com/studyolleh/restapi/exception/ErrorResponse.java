@@ -1,4 +1,4 @@
-package com.studyolleh.modules.exception;
+package com.studyolleh.restapi.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,4 +12,7 @@ public class ErrorResponse {
 
     private String message;
 
+    public static ErrorResponse CreateErrorResponse(HttpStatus httpStatus, String message) {
+        return new ErrorResponse(httpStatus, message);
+    }
 }

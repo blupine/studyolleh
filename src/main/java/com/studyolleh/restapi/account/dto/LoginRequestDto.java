@@ -2,10 +2,12 @@ package com.studyolleh.restapi.account.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
-@Builder
+@RequiredArgsConstructor(staticName = "of")
 public class LoginRequestDto {
-    private String username;
-    private String password;
+    @NonNull private String username;
+    @NonNull private String password;
 }
