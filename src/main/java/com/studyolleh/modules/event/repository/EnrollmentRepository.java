@@ -1,8 +1,8 @@
 package com.studyolleh.modules.event.repository;
 
-import com.studyolleh.modules.account.Account;
-import com.studyolleh.modules.event.Enrollment;
-import com.studyolleh.modules.event.Event;
+import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.event.domain.Enrollment;
+import com.studyolleh.modules.event.domain.Event;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;

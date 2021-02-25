@@ -1,6 +1,6 @@
 package com.studyolleh.modules.event.repository;
 
-import com.studyolleh.modules.event.Enrollment;
+import com.studyolleh.modules.event.domain.Enrollment;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

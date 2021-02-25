@@ -1,7 +1,8 @@
 package com.studyolleh.modules.notification;
 
-import com.studyolleh.modules.account.Account;
-import com.studyolleh.modules.account.UserAccount;
+import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.authentication.UserAccount;
+import com.studyolleh.modules.notification.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -3,14 +3,15 @@ package com.studyolleh.modules.study.event;
 import com.studyolleh.infra.config.AppProperties;
 import com.studyolleh.infra.mail.EmailMessage;
 import com.studyolleh.infra.mail.EmailService;
-import com.studyolleh.modules.account.Account;
-import com.studyolleh.modules.account.AccountPredicates;
-import com.studyolleh.modules.account.AccountRepository;
-import com.studyolleh.modules.notification.Notification;
-import com.studyolleh.modules.notification.NotificationRepository;
-import com.studyolleh.modules.notification.NotificationType;
-import com.studyolleh.modules.study.Study;
-import com.studyolleh.modules.study.StudyRepository;
+import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.repository.AccountRepository;
+import com.studyolleh.modules.account.service.AccountService;
+import com.studyolleh.modules.notification.domain.Notification;
+import com.studyolleh.modules.notification.repository.NotificationRepository;
+import com.studyolleh.modules.notification.domain.NotificationType;
+import com.studyolleh.modules.study.domain.Study;
+import com.studyolleh.modules.study.repository.StudyRepository;
+import com.studyolleh.modules.study.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -33,6 +34,7 @@ public class StudyEventListener {
 
     private final StudyRepository studyRepository;
     private final AccountRepository accountRepository;
+    private final StudyService studyService;
     private final AppProperties appProperties;
     private final TemplateEngine templateEngine;
     private final EmailService emailService;
@@ -40,8 +42,8 @@ public class StudyEventListener {
 
     @EventListener
     public void handleStudyCreatedEvent(StudyCreatedEvent studyCreatedEvent) {
-        Study study = studyRepository.findStudyWithTagsAndZonesById(studyCreatedEvent.getStudy().getId());
-        Iterable<Account> accounts = accountRepository.findAll(AccountPredicates.findByTagsAndZoens(study.getTags(), study.getZones()));
+        Study study = studyCreatedEvent.getStudy();
+        Iterable<Account> accounts = accountRepository.findByTagsAndZones(studyService.getStudyTags(study), studyService.getStudyZones(study));
 
         accounts.forEach(account -> {
             if (account.isStudyCreatedByEmail()) {
@@ -58,10 +60,10 @@ public class StudyEventListener {
 
     @EventListener
     public void handleStudyUpdateEvent(StudyUpdateEvent studyUpdateEvent) {
-        Study study = studyRepository.findStudyWithMembersAndMAnagersById(studyUpdateEvent.getStudy().getId());
+        Study study = studyUpdateEvent.getStudy();
         Set<Account> accounts = new HashSet<>();
-        accounts.addAll(study.getMembers());
-        accounts.addAll(study.getManagers());
+        accounts.addAll(studyService.getStudyMembers(study));
+        accounts.addAll(studyService.getStudyManagers(study));
 
         accounts.forEach(account -> {
             if (account.isStudyUpdatedByEmail()) {

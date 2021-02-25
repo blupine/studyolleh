@@ -1,6 +1,6 @@
 package com.studyolleh.modules.study.event;
 
-import com.studyolleh.modules.study.Study;
+import com.studyolleh.modules.study.domain.Study;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

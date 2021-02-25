@@ -1,7 +1,7 @@
 package com.studyolleh.modules.exception;
 
-import com.studyolleh.modules.account.Account;
-import com.studyolleh.modules.account.CurrentAccount;
+import com.studyolleh.modules.account.domain.Account;
+import com.studyolleh.modules.account.authentication.CurrentAccount;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

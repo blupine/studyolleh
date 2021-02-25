@@ -1,7 +1,7 @@
 package com.studyolleh.modules.event.event;
 
 
-import com.studyolleh.modules.event.Enrollment;
+import com.studyolleh.modules.event.domain.Enrollment;
 
 public class EnrollmentAcceptEvent extends EnrollmentEvent{
 
