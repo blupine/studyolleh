@@ -133,21 +133,21 @@
                                 event.eventType == T(com.studyolleh.modules.event.domain.EventType).CONFIRMATIVE} ">
                             <!-- TODO : URL controller should be implemented-->
                             <a th:if="${event.canAccept(enroll)}" class="btn btn-success"
-                               th:href="@{'/study/' + ${study.path} + '/event/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}">
+                               th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}">
                                 신청 수락
                             </a>
                             <a th:if="${event.canReject(enroll)}" class="btn btn-warning"
-                               th:href="@{'/study/' + ${study.path} + '/event/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}">
+                               th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}">
                                 취소
                             </a>
                         </td>
                         <td th:if="${study.isManager(#authentication.principal)}">
                             <a th:if="${event.isStarted() && enroll.accepted && !enroll.attended}" class="btn btn-success"
-                               th:href="@{'/study/' + ${study.path} + '/event/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">
+                               th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">
                                 체크인
                             </a>
                             <a th:if="${event.isStarted() && enroll.accepted && enroll.attended}" class="btn btn-warning"
-                               th:href="@{'/study/' + ${study.path} + '/event/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin-cancel'}">
+                               th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/cancel-checkin'}">
                                 취소
                             </a>
                         </td>
