@@ -33,7 +33,6 @@ public class RestAccountController {
     private final AccountRepository accountRepository;
     private final ModelMapper modelMapper;
 
-
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid LoginRequestDto loginRequestDto, Errors errors) {
         Optional<AccountDto> optional = loginService.login(loginRequestDto.getUsername(), loginRequestDto.getPassword());
@@ -56,6 +55,7 @@ public class RestAccountController {
     @PostMapping("/signup")
     public ResponseEntity signup(@RequestBody @Valid SignUpRequestDto signUpRequestDto, Errors errors) {
 
+        // TODO : Valid 로직 수정 필요 -> errors 바로 반환하는걸 고쳐야 할듯
         signUpRequestDtoValidator.validate(signUpRequestDto, errors);
         if (errors.hasErrors()) {
             return ResponseEntity.badRequest().body(errors);
